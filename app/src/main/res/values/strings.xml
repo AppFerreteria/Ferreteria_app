@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Ferreteria_app</string>
+
+    <string name="empresa_titulo">Perez S.A.C.</string>
+    <string name="empresa_subtitulo">SOLUCIONES DE FERRETERÍA</string>
+    <string name="btn_ingresar_cliente">Ingresar como Cliente</string>
+    <string name="btn_ingresar_repartidor">Ingresar como Repartidor</string>
+    <string name="footer_texto">© 2024 Perez S.A.C. Industrial</string>
+
+    <string name="btn_iniciar_sesion">Iniciar Sesión</string>
+    <string name="btn_registrar">Registrar</string>
+</resources>
