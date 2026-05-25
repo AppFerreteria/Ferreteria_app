@@ -34,7 +34,6 @@ class LoginActivity : AppCompatActivity() {
         val btnSignIn = findViewById<MaterialButton>(R.id.btnSignIn)
         val btnCreateAccount = findViewById<MaterialButton>(R.id.btnCreateAccount)
 
-        // Referencia única al texto de olvido de contraseña
         val tvForgotPassword = findViewById<TextView>(R.id.tvForgotPassword)
 
         btnCreateAccount.setOnClickListener {
@@ -42,7 +41,6 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // Navegación corregida hacia la actividad exacta
         tvForgotPassword.setOnClickListener {
             val intent = Intent(this, RecuperarActivity::class.java)
             startActivity(intent)

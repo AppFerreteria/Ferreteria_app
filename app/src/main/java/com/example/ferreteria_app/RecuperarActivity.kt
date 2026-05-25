@@ -41,7 +41,7 @@ class RecuperarActivity : AppCompatActivity() {
         }
 
         findViewById<TextView>(R.id.tvVolverLogin).setOnClickListener {
-            finish() // Cierra la pantalla y regresa al Login
+            finish()
         }
     }
 
@@ -59,7 +59,6 @@ class RecuperarActivity : AppCompatActivity() {
             return
         }
 
-        // Método oficial de Firebase Auth para restablecimiento
         auth.sendPasswordResetEmail(email)
             .addOnCompleteListener { tarea ->
                 if (tarea.isSuccessful) {

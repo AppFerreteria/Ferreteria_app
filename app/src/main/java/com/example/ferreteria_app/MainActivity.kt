@@ -19,16 +19,14 @@ class MainActivity : AppCompatActivity() {
         // 1. Inicializar motor de Firebase Auth
         auth = FirebaseAuth.getInstance()
 
-        // 2. Interceptor de Persistencia de Sesión
         if (auth.currentUser != null) {
-            // Si el usuario ya está logueado, lo enviamos directo al catálogo
+
             val intent = Intent(this, CatalogoActivity::class.java)
             startActivity(intent)
             finish()
-            return // Detiene la ejecución para no cargar la vista de MainActivity
+            return
         }
 
-        // 3. Carga normal de la vista (solo si no hay sesión activa)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
@@ -38,7 +36,6 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        // Lógica de tus botones originales
         val btnClient = findViewById<MaterialButton>(R.id.btnClient)
 
         btnClient.setOnClickListener {

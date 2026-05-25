@@ -23,7 +23,6 @@ class RecuperarPasswordActivity : AppCompatActivity() {
             insets
         }
 
-        // Navegación de regreso al Login mediante el botón superior
         val tvVolverLogin = findViewById<TextView>(R.id.tvVolverLogin)
         tvVolverLogin.setOnClickListener {
             finish()
@@ -33,23 +32,19 @@ class RecuperarPasswordActivity : AppCompatActivity() {
         val etRecuperarEmail = findViewById<TextInputEditText>(R.id.etRecuperarEmail)
         val btnEnviarEnlace = findViewById<MaterialButton>(R.id.btnEnviarEnlace)
 
-        // Lógica de validación al presionar el botón
         btnEnviarEnlace.setOnClickListener {
             val email = etRecuperarEmail.text.toString().trim()
 
-            // Validación de campo vacío
             if (email.isEmpty()) {
                 Toast.makeText(this, "Por favor, ingrese su correo electrónico", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            // Validación de estructura del correo electrónico
             if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                 Toast.makeText(this, "Formato de correo electrónico inválido", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            // Flujo correcto
             Toast.makeText(this, "Enlace enviado correctamente", Toast.LENGTH_SHORT).show()
         }
     }

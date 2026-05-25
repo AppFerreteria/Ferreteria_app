@@ -27,19 +27,15 @@ class PerfilActivity : AppCompatActivity() {
 
         configurarNavegacionInferior()
 
-        // 1. Conexión del botón de Edición
         findViewById<MaterialButton>(R.id.btnEditProfile).setOnClickListener {
             startActivity(Intent(this, EditarPerfilActivity::class.java))
         }
 
-        // 2. Conexión del botón de Cierre de Sesión
         findViewById<LinearLayout>(R.id.btnLogout).setOnClickListener {
             cerrarSesion()
         }
     }
 
-    // Se ejecuta de manera nativa cada vez que la actividad vuelve al primer plano.
-    // Esto garantiza que la información se actualice inmediatamente después de cerrar EditarPerfilActivity.
     override fun onResume() {
         super.onResume()
         cargarDatosUsuario()

@@ -24,18 +24,15 @@ class RegistroActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_registro)
 
-        // 1. Inicializar motores de Firebase
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
 
-        // Ajuste de márgenes del sistema
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        // 2. Referencias exactas a la Interfaz
         val etNombre = findViewById<TextInputEditText>(R.id.etNombre)
         val etRegistroEmail = findViewById<TextInputEditText>(R.id.etRegistroEmail)
         val etTelefono = findViewById<TextInputEditText>(R.id.etTelefono)
@@ -50,7 +47,6 @@ class RegistroActivity : AppCompatActivity() {
             finish()
         }
 
-        // 3. Lógica de Ejecución
         btnSubmitRegistro.setOnClickListener {
             val nombre = etNombre.text.toString().trim()
             val email = etRegistroEmail.text.toString().trim()
@@ -59,7 +55,6 @@ class RegistroActivity : AppCompatActivity() {
             val confirmarPassword = etConfirmarPassword.text.toString().trim()
             val aceptaTerminos = cbTerminos.isChecked
 
-            // Validaciones Estrictas
             if (nombre.isEmpty() || email.isEmpty() || telefono.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Completa todos los campos obligatorios", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
@@ -71,7 +66,6 @@ class RegistroActivity : AppCompatActivity() {
             }
 
             if (password.length < 6) {
-                // Especificación oficial: Firebase Auth requiere un mínimo de 6 caracteres
                 Toast.makeText(this, "La contraseña debe tener al menos 6 caracteres", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -81,7 +75,7 @@ class RegistroActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // 4. Inserción en la Nube
+            //Inserción en la Nube
             auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
@@ -100,7 +94,7 @@ class RegistroActivity : AppCompatActivity() {
                                 .addOnSuccessListener {
                                     Toast.makeText(this, "Cuenta creada con éxito", Toast.LENGTH_SHORT).show()
 
-                                    // Enrutamiento seguro al Catálogo (Cierra las pantallas anteriores)
+                                    // Enrutamiento al Catálogo
                                     val intent = Intent(this, CatalogoActivity::class.java)
                                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                     startActivity(intent)

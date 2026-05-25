@@ -39,7 +39,6 @@ class CatalogoActivity : AppCompatActivity() {
             insets
         }
 
-        // Llamada a la función externa
         configurarNavegacionInferior()
 
         // Carrusel de Categorías
@@ -60,14 +59,14 @@ class CatalogoActivity : AppCompatActivity() {
         obtenerNombreUsuario()
     }
 
-    // Configuración exacta del Menú Inferior (FUERA de onCreate)
+    // Configuración del Menú Inferior
     private fun configurarNavegacionInferior() {
         val bottomNavigation = findViewById<BottomNavigationView>(R.id.bottomNavigation)
         bottomNavigation.selectedItemId = R.id.nav_inicio
 
         bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_inicio -> true // Ya estamos aquí
+                R.id.nav_inicio -> true
 
                 R.id.nav_buscar -> {
                     startActivity(Intent(this, BuscarActivity::class.java))

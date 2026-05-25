@@ -10,10 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 
 class CategoriasAdapter(
     private var listaCategorias: List<String>,
-    private val onCategoriaClick: (String) -> Unit // Canal de comunicación con la Actividad
+    private val onCategoriaClick: (String) -> Unit
 ) : RecyclerView.Adapter<CategoriasAdapter.CategoriaViewHolder>() {
 
-    // Por defecto, la posición 0 ("Todos") estará seleccionada al iniciar
     private var posicionSeleccionada = 0
 
     class CategoriaViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -30,12 +29,12 @@ class CategoriasAdapter(
         val categoria = listaCategorias[position]
         holder.tvCategoriaNombre.text = categoria
 
-        // Lógica de estado visual (Seleccionado vs No Seleccionado)
+        // Lógica de estado visual
         if (position == posicionSeleccionada) {
-            holder.tvCategoriaNombre.setTextColor(Color.parseColor("#E65100")) // Naranja de la marca
+            holder.tvCategoriaNombre.setTextColor(Color.parseColor("#E65100"))
             holder.tvCategoriaNombre.setTypeface(null, Typeface.BOLD)
         } else {
-            holder.tvCategoriaNombre.setTextColor(Color.parseColor("#4A3B32")) // Marrón oscuro normal
+            holder.tvCategoriaNombre.setTextColor(Color.parseColor("#4A3B32"))
             holder.tvCategoriaNombre.setTypeface(null, Typeface.NORMAL)
         }
 
@@ -44,11 +43,9 @@ class CategoriasAdapter(
             val posicionAnterior = posicionSeleccionada
             posicionSeleccionada = holder.adapterPosition
 
-            // Refrescar solo los dos ítems que cambiaron de estado para optimizar rendimiento
             notifyItemChanged(posicionAnterior)
             notifyItemChanged(posicionSeleccionada)
 
-            // Enviar la categoría seleccionada a la Actividad
             onCategoriaClick(categoria)
         }
     }

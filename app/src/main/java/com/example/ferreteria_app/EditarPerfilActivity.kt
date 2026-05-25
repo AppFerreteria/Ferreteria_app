@@ -137,7 +137,6 @@ class EditarPerfilActivity : AppCompatActivity() {
             esValido = false
         }
 
-        // Validación logística obligatoria (HU-003)
         if (direccion.isEmpty()) {
             tilDireccion.error = getString(R.string.error_direccion_vacia)
             esValido = false

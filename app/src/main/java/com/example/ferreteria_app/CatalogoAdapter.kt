@@ -41,29 +41,27 @@ class CatalogoAdapter(private var listaProductos: List<Producto>) :
             crossfade(true)
         }
 
-        // Lógica de Renderizado de Inventario (Estado Agotado)
         if (producto.stock <= 0) {
-            // Configuración visual para inventario cero
             holder.tvProductoStock.text = "Agotado"
-            holder.tvProductoStock.setTextColor(Color.parseColor("#E53935")) // Rojo de Material Design
+            holder.tvProductoStock.setTextColor(Color.parseColor("#E53935"))
 
-            // Atenuación y bloqueo estricto de eventos de clic
+            // Atenuación
             holder.itemView.alpha = 0.5f
             holder.btnAccion.isEnabled = false
             holder.btnAccion.isClickable = false
             holder.itemView.setOnClickListener(null)
         } else {
-            // Configuración visual para inventario disponible
-            holder.tvProductoStock.text = "Stock: ${producto.stock}"
-            holder.tvProductoStock.setTextColor(Color.parseColor("#718096")) // Gris neutro
 
-            // Restauración de propiedades activas
+            holder.tvProductoStock.text = "Stock: ${producto.stock}"
+            holder.tvProductoStock.setTextColor(Color.parseColor("#718096"))
+
+
             holder.itemView.alpha = 1.0f
             holder.btnAccion.isEnabled = true
             holder.btnAccion.isClickable = true
 
             holder.itemView.setOnClickListener {
-                // Implementación futura de navegación al detalle del producto
+
             }
         }
     }
