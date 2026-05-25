@@ -21,59 +21,52 @@ class LoginActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_login)
 
-        // 1. Inicializar el motor de autenticación
         auth = FirebaseAuth.getInstance()
 
-        // Ajuste de márgenes del sistema (Edge-to-Edge)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        // 2. Referencias exactas de la interfaz XML
         val etEmail = findViewById<TextInputEditText>(R.id.etEmail)
         val etPassword = findViewById<TextInputEditText>(R.id.etPassword)
         val btnSignIn = findViewById<MaterialButton>(R.id.btnSignIn)
         val btnCreateAccount = findViewById<MaterialButton>(R.id.btnCreateAccount)
+
+        // Referencia única al texto de olvido de contraseña
         val tvForgotPassword = findViewById<TextView>(R.id.tvForgotPassword)
 
-        // Navegación al Registro
         btnCreateAccount.setOnClickListener {
             val intent = Intent(this, RegistroActivity::class.java)
             startActivity(intent)
         }
 
-        // Navegación a Recuperar Contraseña
+        // Navegación corregida hacia la actividad exacta
         tvForgotPassword.setOnClickListener {
-            val intent = Intent(this, RecuperarPasswordActivity::class.java)
+            val intent = Intent(this, RecuperarActivity::class.java)
             startActivity(intent)
         }
 
-        // 3. Lógica de Inicio de Sesión Real con Firebase
         btnSignIn.setOnClickListener {
             val email = etEmail.text.toString().trim()
             val password = etPassword.text.toString().trim()
 
-            // Validaciones locales
             if (email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Por favor, ingresa tu correo y contraseña", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            // Petición de autenticación a Firebase
             auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         Toast.makeText(this, "Inicio de sesión correcto", Toast.LENGTH_SHORT).show()
 
-                        // Enrutamiento seguro al Catálogo limpiando el historial de pantallas
                         val intent = Intent(this, CatalogoActivity::class.java)
                         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         startActivity(intent)
                         finish()
                     } else {
-                        // Captura de error de credenciales incorrectas o problemas de red
                         Toast.makeText(this, "Error de acceso: ${task.exception?.message}", Toast.LENGTH_LONG).show()
                     }
                 }

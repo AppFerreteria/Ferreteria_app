@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Ferreteria_app</string>
 
@@ -7,9 +8,6 @@
     <string name="btn_ingresar_repartidor">Ingresar como Repartidor</string>
     <string name="footer_texto">© 2024 Perez S.A.C. Industrial</string>
 
-    <string name="btn_iniciar_sesion">Iniciar Sesión</string>
-    <string name="btn_registrar">Registrar</string>
-
     <string name="login_portal_acceso">Acceso al Portal de Compras</string>
     <string name="label_email">Correo Electrónico</string>
     <string name="hint_email">Ingresa tu correo</string>
@@ -17,26 +15,23 @@
     <string name="hint_password">Ingresa tu contraseña</string>
     <string name="btn_olvido_password">¿Olvidaste tu contraseña?</string>
     <string name="btn_iniciar_sesion_login">Iniciar Sesión</string>
+    <string name="btn_iniciar_sesion">Iniciar Sesión</string>
     <string name="separador_o">O</string>
     <string name="btn_crear_cuenta">Crear cuenta</string>
+    <string name="btn_registrar">Registrar</string>
 
     <string name="registro_titulo">Crear una cuenta</string>
     <string name="registro_subtitulo">Complete sus datos profesionales para registrarse en la plataforma.</string>
-
     <string name="label_nombre">Nombre completo</string>
     <string name="hint_nombre">Carlos Mendoza</string>
-
     <string name="label_telefono">Teléfono de contacto</string>
     <string name="hint_telefono">987 654 321</string>
     <string name="error_telefono">El número debe contener al menos 9 dígitos.</string>
-
     <string name="label_confirmar_password">Confirmar contraseña</string>
     <string name="hint_asteriscos">........</string>
-
     <string name="texto_terminos">Acepto los Términos y Condiciones y la Política de Privacidad de Perez S.A.C.</string>
     <string name="btn_crear_cuenta_submit">Crear cuenta</string>
     <string name="footer_ya_tienes_cuenta">¿Ya tienes una cuenta? Iniciar sesión</string>
-
 
     <string name="recuperar_titulo">Recuperar Contraseña</string>
     <string name="recuperar_subtitulo">Ingrese el correo electrónico asociado a su cuenta y le enviaremos un enlace seguro para restablecer su contraseña.</string>
@@ -44,4 +39,64 @@
     <string name="btn_enviar_enlace">Enviar Enlace</string>
     <string name="volver_login">Volver al inicio</string>
     <string name="conexion_segura">CONEXIÓN SEGURA</string>
+
+    <string name="saludo_usuario">Hola,</string>
+    <string name="usuario_default">Usuario</string>
+    <string name="titulo_categorias">Categorías</string>
+    <string name="titulo_productos_destacados">Productos Destacados</string>
+
+    <string name="hint_buscador">Buscar herramientas, materiales...</string>
+    <string name="titulo_resultados_busqueda">Resultados de búsqueda</string>
+    <string name="titulo_explorar_productos">Explorar productos</string>
+    <string name="formato_resultados_para">Resultados para \"%1$s\"</string>
+    <string name="btn_filtros">Filtros</string>
+    <string name="titulo_dialogo_filtros">Filtros de Búsqueda</string>
+    <string name="label_categoria">Categoría</string>
+    <string name="label_precio_maximo">Precio Máximo</string>
+    <string name="label_disponibilidad">Disponibilidad</string>
+    <string name="btn_aplicar_filtros">Aplicar Filtros</string>
+    <string name="formato_max_precio">Max: S/ %1$.2f</string>
+    <string name="texto_sin_limite">Sin límite</string>
+    <string name="chip_solo_stock">Solo en Stock</string>
+    <string name="chip_en_stock">En Stock</string>
+    <string name="categoria_todos">Todos</string>
+
+    <string name="formato_precio">S/ %1$.2f</string>
+    <string name="formato_stock">Stock: %1$d</string>
+    <string name="estado_agotado">Agotado</string>
+
+    <string name="titulo_mi_perfil">Mi Perfil</string>
+    <string name="btn_editar_perfil">Editar Perfil</string>
+    <string name="titulo_pedidos">Mis Pedidos</string>
+    <string name="subtitulo_pedidos">Ver historial</string>
+    <string name="titulo_direcciones">Mis Direcciones</string>
+    <string name="subtitulo_direcciones">Gestionar entregas</string>
+    <string name="titulo_configuracion">Configuración</string>
+    <string name="btn_cerrar_sesion">Cerrar Sesión</string>
+    <string name="toast_cierre_sesion">Sesión cerrada correctamente</string>
+    <string name="texto_sin_telefono">Sin teléfono</string>
+
+
+    <string name="titulo_editar_perfil">Editar Datos</string>
+    <string name="label_tipo_documento">Tipo de Documento</string>
+    <string name="opcion_dni">DNI (Boleta)</string>
+    <string name="opcion_ruc">RUC (Factura)</string>
+    <string name="label_num_documento">Número de Documento</string>
+    <string name="hint_documento">00000000</string>
+    <string name="label_direccion">Dirección de Entrega</string>
+    <string name="hint_direccion">Av. Los Constructores 123, Distrito</string>
+    <string name="label_referencia">Referencia de Ubicación</string>
+    <string name="hint_referencia">Frente al parque principal, portón azul</string>
+    <string name="btn_guardar_cambios">Guardar Cambios</string>
+
+    <string name="error_nombre_vacio">El nombre completo es obligatorio.</string>
+    <string name="error_dni">El DNI debe contener exactamente 8 dígitos numéricos.</string>
+    <string name="error_ruc">El RUC debe contener exactamente 11 dígitos numéricos.</string>
+    <string name="error_direccion_vacia">La dirección es obligatoria para procesar despachos.</string>
+    <string name="toast_perfil_guardado">Datos actualizados correctamente en Firestore</string>
+    <string name="toast_error_guardar">Fallo de red: No se pudo actualizar el perfil</string>
+
+    <string name="error_email_vacio">Debe ingresar su correo electrónico.</string>
+    <string name="toast_recuperacion_enviada">Enlace enviado. Revise su bandeja de entrada o spam.</string>
+    <string name="toast_recuperacion_error">Error al enviar el correo. Verifique que la dirección sea correcta.</string>
 </resources>

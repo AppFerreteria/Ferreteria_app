@@ -23,8 +23,7 @@
             android:src="@drawable/ic_martillo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tvProductoCategoria"
@@ -55,6 +54,18 @@
             tools:text="Cemento Sol Tipo I (42.5kg)" />
 
         <TextView
+            android:id="@+id/tvProductoStock"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvProductoNombre"
+            tools:text="Stock: 10" />
+
+        <TextView
             android:id="@+id/tvProductoPrecio"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -64,33 +75,26 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvProductoNombre"
+            app:layout_constraintTop_toBottomOf="@id/tvProductoStock"
             tools:text="S/ 28.50" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnAgregarCarrito"
             style="@style/Widget.Material3.Button.IconButton"
-
             android:layout_width="25dp"
             android:layout_height="25dp"
-
             android:backgroundTint="@color/brand_orange"
-
             android:insetTop="0dp"
             android:insetBottom="0dp"
             android:insetLeft="0dp"
             android:insetRight="0dp"
-
             android:padding="0dp"
-
             app:cornerRadius="20dp"
-
             app:icon="@drawable/ic_add"
             app:iconSize="20dp"
             app:iconGravity="textStart"
             app:iconPadding="0dp"
             app:iconTint="@color/white"
-
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/tvProductoPrecio" />

@@ -1,0 +1,18 @@
+# Archivos específicos de Android Studio y Gradle
+.gradle/
+/build/
+local.properties
+
+# Configuración de la interfaz y del IDE
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/gradle.xml
+.idea/assetWizardSettings.xml
+.idea/dictionaries
+.idea/libraries/
+.idea/caches/
+
+# Archivos de registro y temporales
+*.iml
+*.log
+.DS_Store

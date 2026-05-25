@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_light_gray"
+    android:padding="24dp">
+
+    <ImageView
+        android:id="@+id/ivIconoRecuperar"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="32dp"
+        android:src="@android:drawable/ic_dialog_email"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/brand_orange" />
+
+    <TextView
+        android:id="@+id/tvTituloRecuperar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/recuperar_titulo"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/ivIconoRecuperar" />
+
+    <TextView
+        android:id="@+id/tvSubtituloRecuperar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/recuperar_subtitulo"
+        android:textAlignment="center"
+        android:textColor="@color/text_gray"
+        android:textSize="14sp"
+        app:layout_constraintTop_toBottomOf="@id/tvTituloRecuperar" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilEmailRecuperar"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        app:boxCornerRadiusBottomEnd="12dp"
+        app:boxCornerRadiusBottomStart="12dp"
+        app:boxCornerRadiusTopEnd="12dp"
+        app:boxCornerRadiusTopStart="12dp"
+        app:layout_constraintTop_toBottomOf="@id/tvSubtituloRecuperar">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etEmailRecuperar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_email_recuperar"
+            android:inputType="textEmailAddress" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnEnviarEnlace"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/btn_enviar_enlace"
+        android:textAllCaps="false"
+        app:backgroundTint="@color/brand_orange"
+        app:cornerRadius="12dp"
+        app:layout_constraintTop_toBottomOf="@id/tilEmailRecuperar" />
+
+    <TextView
+        android:id="@+id/tvVolverLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:padding="8dp"
+        android:text="@string/volver_login"
+        android:textColor="@color/brand_brown"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnEnviarEnlace" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:drawablePadding="8dp"
+        android:text="@string/conexion_segura"
+        android:textColor="@color/text_hint_gray"
+        android:textSize="12sp"
+        app:drawableStartCompat="@android:drawable/ic_secure"
+        app:drawableTint="@color/text_hint_gray"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

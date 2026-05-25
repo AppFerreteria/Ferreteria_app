@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -12,6 +13,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Ferreteria_app">
+        <activity
+            android:name=".RecuperarActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EditarPerfilActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PerfilActivity"
+            android:exported="false" />
+        <activity
+            android:name=".BuscarActivity"
+            android:exported="false" />
         <activity
             android:name=".RecuperarPasswordActivity"
             android:exported="false" />

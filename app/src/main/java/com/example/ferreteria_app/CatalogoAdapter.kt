@@ -1,14 +1,15 @@
 package com.example.ferreteria_app
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.button.MaterialButton
 import coil3.load
-import coil3.request.*
+import coil3.request.crossfade
+
 class CatalogoAdapter(private var listaProductos: List<Producto>) :
     RecyclerView.Adapter<CatalogoAdapter.ProductoViewHolder>() {
 
@@ -16,8 +17,9 @@ class CatalogoAdapter(private var listaProductos: List<Producto>) :
         val ivProductoImagen: ImageView = view.findViewById(R.id.ivProductoImagen)
         val tvProductoCategoria: TextView = view.findViewById(R.id.tvProductoCategoria)
         val tvProductoNombre: TextView = view.findViewById(R.id.tvProductoNombre)
+        val tvProductoStock: TextView = view.findViewById(R.id.tvProductoStock) // Enlace del nuevo componente
         val tvProductoPrecio: TextView = view.findViewById(R.id.tvProductoPrecio)
-        val btnAgregarCarrito: MaterialButton = view.findViewById(R.id.btnAgregarCarrito)
+        val btnAccion: View = view.findViewById(R.id.btnAgregarCarrito)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductoViewHolder {
@@ -29,21 +31,44 @@ class CatalogoAdapter(private var listaProductos: List<Producto>) :
     override fun onBindViewHolder(holder: ProductoViewHolder, position: Int) {
         val producto = listaProductos[position]
 
+        // Carga de la información base
         holder.tvProductoCategoria.text = producto.categoria
         holder.tvProductoNombre.text = producto.nombre
-        holder.tvProductoPrecio.text = String.format("S/ %.2f", producto.precio)
+        holder.tvProductoPrecio.text = "S/ ${String.format("%.2f", producto.precio)}"
 
-        // --- MOTOR COIL: Carga asíncrona de la imagen desde Firestore ---
+        // Carga de imagen asíncrona
         holder.ivProductoImagen.load(producto.imagenUrl) {
             crossfade(true)
-            placeholder(R.drawable.ic_martillo)
-            error(R.drawable.ic_martillo)
+        }
+
+        // Lógica de Renderizado de Inventario (Estado Agotado)
+        if (producto.stock <= 0) {
+            // Configuración visual para inventario cero
+            holder.tvProductoStock.text = "Agotado"
+            holder.tvProductoStock.setTextColor(Color.parseColor("#E53935")) // Rojo de Material Design
+
+            // Atenuación y bloqueo estricto de eventos de clic
+            holder.itemView.alpha = 0.5f
+            holder.btnAccion.isEnabled = false
+            holder.btnAccion.isClickable = false
+            holder.itemView.setOnClickListener(null)
+        } else {
+            // Configuración visual para inventario disponible
+            holder.tvProductoStock.text = "Stock: ${producto.stock}"
+            holder.tvProductoStock.setTextColor(Color.parseColor("#718096")) // Gris neutro
+
+            // Restauración de propiedades activas
+            holder.itemView.alpha = 1.0f
+            holder.btnAccion.isEnabled = true
+            holder.btnAccion.isClickable = true
+
+            holder.itemView.setOnClickListener {
+                // Implementación futura de navegación al detalle del producto
+            }
         }
     }
 
-    override fun getItemCount(): Int {
-        return listaProductos.size
-    }
+    override fun getItemCount(): Int = listaProductos.size
 
     fun actualizarLista(nuevaLista: List<Producto>) {
         listaProductos = nuevaLista

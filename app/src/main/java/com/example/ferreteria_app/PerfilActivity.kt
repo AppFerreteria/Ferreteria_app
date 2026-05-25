@@ -1,0 +1,94 @@
+package com.example.ferreteria_app
+
+import android.content.Intent
+import android.os.Bundle
+import android.widget.LinearLayout
+import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.button.MaterialButton
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+
+class PerfilActivity : AppCompatActivity() {
+
+    private lateinit var auth: FirebaseAuth
+    private lateinit var db: FirebaseFirestore
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContentView(R.layout.activity_perfil)
+
+        auth = FirebaseAuth.getInstance()
+        db = FirebaseFirestore.getInstance()
+
+        configurarNavegacionInferior()
+
+        // 1. Conexión del botón de Edición
+        findViewById<MaterialButton>(R.id.btnEditProfile).setOnClickListener {
+            startActivity(Intent(this, EditarPerfilActivity::class.java))
+        }
+
+        // 2. Conexión del botón de Cierre de Sesión
+        findViewById<LinearLayout>(R.id.btnLogout).setOnClickListener {
+            cerrarSesion()
+        }
+    }
+
+    // Se ejecuta de manera nativa cada vez que la actividad vuelve al primer plano.
+    // Esto garantiza que la información se actualice inmediatamente después de cerrar EditarPerfilActivity.
+    override fun onResume() {
+        super.onResume()
+        cargarDatosUsuario()
+    }
+
+    private fun cargarDatosUsuario() {
+        val uid = auth.currentUser?.uid
+        if (uid != null) {
+            db.collection("usuarios").document(uid).get()
+                .addOnSuccessListener { doc ->
+                    if (doc.exists()) {
+                        findViewById<TextView>(R.id.tvNombrePerfil).text = doc.getString("nombre")
+                        findViewById<TextView>(R.id.tvEmailPerfil).text = auth.currentUser?.email
+
+                        val telefono = doc.getString("telefono")
+                        findViewById<TextView>(R.id.tvTelefonoPerfil).text =
+                            if (!telefono.isNullOrEmpty()) telefono else getString(R.string.texto_sin_telefono)
+                    }
+                }
+        }
+    }
+
+    private fun cerrarSesion() {
+        auth.signOut()
+        val intent = Intent(this, LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
+
+        Toast.makeText(this, getString(R.string.toast_cierre_sesion), Toast.LENGTH_SHORT).show()
+    }
+
+    private fun configurarNavegacionInferior() {
+        val nav = findViewById<BottomNavigationView>(R.id.bottomNavigationPerfil)
+        nav.selectedItemId = R.id.nav_perfil
+        nav.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_inicio -> {
+                    startActivity(Intent(this, CatalogoActivity::class.java))
+                    finish()
+                    true
+                }
+                R.id.nav_buscar -> {
+                    startActivity(Intent(this, BuscarActivity::class.java))
+                    finish()
+                    true
+                }
+                else -> true
+            }
+        }
+    }
+}

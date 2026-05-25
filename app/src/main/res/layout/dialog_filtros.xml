@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Filtros de Búsqueda"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Categoría"
+        android:textColor="@color/brand_brown"
+        android:textStyle="bold" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/cgFiltrosCategoria"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:singleSelection="true" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Precio Máximo"
+            android:textColor="@color/brand_brown"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvPrecioSeleccionado"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cargando..."
+            android:textColor="@color/brand_orange"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <com.google.android.material.slider.Slider
+        android:id="@+id/sliderPrecio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:valueFrom="0.0"
+        android:valueTo="100.0"
+        app:labelBehavior="withinBounds"
+        app:thumbColor="@color/brand_orange"
+        app:trackColorActive="@color/brand_orange" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Disponibilidad"
+        android:textColor="@color/brand_brown"
+        android:textStyle="bold" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/cgFiltrosStock"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:singleSelection="true">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipSoloStock"
+            style="@style/Widget.Material3.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:text="Solo en Stock" />
+    </com.google.android.material.chip.ChipGroup>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnAplicarFiltros"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="32dp"
+        android:text="Aplicar Filtros"
+        android:textAllCaps="false"
+        app:backgroundTint="@color/brand_orange"
+        app:cornerRadius="12dp" />
+
+</LinearLayout>
