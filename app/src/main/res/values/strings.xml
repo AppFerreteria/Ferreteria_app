@@ -9,4 +9,39 @@
 
     <string name="btn_iniciar_sesion">Iniciar Sesión</string>
     <string name="btn_registrar">Registrar</string>
+
+    <string name="login_portal_acceso">Acceso al Portal de Compras</string>
+    <string name="label_email">Correo Electrónico</string>
+    <string name="hint_email">Ingresa tu correo</string>
+    <string name="label_password">Contraseña</string>
+    <string name="hint_password">Ingresa tu contraseña</string>
+    <string name="btn_olvido_password">¿Olvidaste tu contraseña?</string>
+    <string name="btn_iniciar_sesion_login">Iniciar Sesión</string>
+    <string name="separador_o">O</string>
+    <string name="btn_crear_cuenta">Crear cuenta</string>
+
+    <string name="registro_titulo">Crear una cuenta</string>
+    <string name="registro_subtitulo">Complete sus datos profesionales para registrarse en la plataforma.</string>
+
+    <string name="label_nombre">Nombre completo</string>
+    <string name="hint_nombre">Carlos Mendoza</string>
+
+    <string name="label_telefono">Teléfono de contacto</string>
+    <string name="hint_telefono">987 654 321</string>
+    <string name="error_telefono">El número debe contener al menos 9 dígitos.</string>
+
+    <string name="label_confirmar_password">Confirmar contraseña</string>
+    <string name="hint_asteriscos">........</string>
+
+    <string name="texto_terminos">Acepto los Términos y Condiciones y la Política de Privacidad de Perez S.A.C.</string>
+    <string name="btn_crear_cuenta_submit">Crear cuenta</string>
+    <string name="footer_ya_tienes_cuenta">¿Ya tienes una cuenta? Iniciar sesión</string>
+
+
+    <string name="recuperar_titulo">Recuperar Contraseña</string>
+    <string name="recuperar_subtitulo">Ingrese el correo electrónico asociado a su cuenta y le enviaremos un enlace seguro para restablecer su contraseña.</string>
+    <string name="hint_email_recuperar">nombre@empresa.com</string>
+    <string name="btn_enviar_enlace">Enviar Enlace</string>
+    <string name="volver_login">Volver al inicio</string>
+    <string name="conexion_segura">CONEXIÓN SEGURA</string>
 </resources>

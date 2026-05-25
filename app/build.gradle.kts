@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -46,4 +47,15 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     //implementation("androidx.constraintlayout:constraintlayout:2.2.0")
     //implementation("com.google.android.material:material:1.14.0")
+    // Importar Firebase BoM (Bill of Materials)
+    implementation(platform("com.google.firebase:firebase-bom:34.13.0"))
+
+    // Declarar Firestore sin especificar versión (BoM la controla)
+    implementation("com.google.firebase:firebase-firestore")
+    // Motor de imágenes
+    implementation("io.coil-kt.coil3:coil:3.4.0")
+    implementation("io.coil-kt.coil3:coil-network-okhttp:3.4.0")
+
+    // Motor oficial de Firebase Authentication
+    implementation("com.google.firebase:firebase-auth")
 }

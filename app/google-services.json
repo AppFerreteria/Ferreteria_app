@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "448653783204",
+    "project_id": "ferreteria-419a4",
+    "storage_bucket": "ferreteria-419a4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:448653783204:android:ea753bf47c42fd387d3631",
+        "android_client_info": {
+          "package_name": "com.example.ferreteria_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAS3vKFfITgI3w29qoBQgGfG8Cc8yKoDdI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
