@@ -52,7 +52,9 @@ class CatalogoActivity : AppCompatActivity() {
         // Cuadrícula de Productos
         val rvProductos = findViewById<RecyclerView>(R.id.rvContenedorPrincipal)
         rvProductos.layoutManager = GridLayoutManager(this, 2)
-        adaptadorProductos = CatalogoAdapter(emptyList())
+        adaptadorProductos = CatalogoAdapter(emptyList()) { producto ->
+            agregarProductoAlCarrito(producto)
+        }
         rvProductos.adapter = adaptadorProductos
 
         obtenerDatosDesdeFirebase()
@@ -73,6 +75,11 @@ class CatalogoActivity : AppCompatActivity() {
                     true
                 }
 
+                R.id.nav_carrito -> {
+                    startActivity(Intent(this, CarritoActivity::class.java))
+                    true
+                }
+
                 R.id.nav_perfil -> {
                     startActivity(Intent(this, PerfilActivity::class.java))
                     true
@@ -89,13 +96,13 @@ class CatalogoActivity : AppCompatActivity() {
                 val listaDescargada = mutableListOf<Producto>()
 
                 for (documento in resultado) {
-                    val producto = documento.toObject(Producto::class.java)
+                    val producto = documento.toObject(Producto::class.java).copy(id = documento.id)
                     listaDescargada.add(producto)
                 }
 
                 listaProductosMaestra = listaDescargada
 
-                val listaCategoriasDinamicas = mutableListOf("Todos")
+                val listaCategoriasDinamicas = mutableListOf(getString(R.string.categoria_todos))
                 listaCategoriasDinamicas.addAll(listaProductosMaestra.map { it.categoria }.distinct())
 
                 adaptadorCategorias.actualizarLista(listaCategoriasDinamicas)
@@ -103,12 +110,12 @@ class CatalogoActivity : AppCompatActivity() {
             }
             .addOnFailureListener { excepcion ->
                 Log.e("FirebaseError", "Error de conexión", excepcion)
-                Toast.makeText(this, "Fallo al cargar catálogo", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.toast_error_catalogo), Toast.LENGTH_SHORT).show()
             }
     }
 
     private fun filtrarPorCategoria(categoria: String) {
-        if (categoria == "Todos") {
+        if (categoria == getString(R.string.categoria_todos)) {
             adaptadorProductos.actualizarLista(listaProductosMaestra)
         } else {
             val listaFiltrada = listaProductosMaestra.filter { it.categoria == categoria }
@@ -135,5 +142,22 @@ class CatalogoActivity : AppCompatActivity() {
                     Log.e("FirestoreError", "Error al obtener datos de usuario", excepcion)
                 }
         }
+    }
+
+    private fun agregarProductoAlCarrito(producto: Producto) {
+        val repo = CarritoRepository()
+        repo.agregarProducto(
+            producto = producto,
+            onSuccess = {
+                runOnUiThread {
+                    Toast.makeText(this, R.string.toast_producto_agregado, Toast.LENGTH_SHORT).show()
+                }
+            },
+            onError = { mensaje ->
+                runOnUiThread {
+                    Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show()
+                }
+            }
+        )
     }
 }

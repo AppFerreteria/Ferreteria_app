@@ -10,7 +10,10 @@ import androidx.recyclerview.widget.RecyclerView
 import coil3.load
 import coil3.request.crossfade
 
-class CatalogoAdapter(private var listaProductos: List<Producto>) :
+class CatalogoAdapter(
+    private var listaProductos: List<Producto>,
+    private val onAgregarAlCarrito: (Producto) -> Unit
+) :
     RecyclerView.Adapter<CatalogoAdapter.ProductoViewHolder>() {
 
     class ProductoViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -34,7 +37,7 @@ class CatalogoAdapter(private var listaProductos: List<Producto>) :
         // Carga de la información base
         holder.tvProductoCategoria.text = producto.categoria
         holder.tvProductoNombre.text = producto.nombre
-        holder.tvProductoPrecio.text = "S/ ${String.format("%.2f", producto.precio)}"
+        holder.tvProductoPrecio.text = holder.itemView.context.getString(R.string.formato_precio, producto.precio)
 
         // Carga de imagen asíncrona
         holder.ivProductoImagen.load(producto.imagenUrl) {
@@ -42,8 +45,8 @@ class CatalogoAdapter(private var listaProductos: List<Producto>) :
         }
 
         if (producto.stock <= 0) {
-            holder.tvProductoStock.text = "Agotado"
-            holder.tvProductoStock.setTextColor(Color.parseColor("#E53935"))
+            holder.tvProductoStock.text = holder.itemView.context.getString(R.string.estado_agotado)
+            holder.tvProductoStock.setTextColor(androidx.core.content.ContextCompat.getColor(holder.itemView.context, R.color.red_error))
 
             // Atenuación
             holder.itemView.alpha = 0.5f
@@ -52,16 +55,16 @@ class CatalogoAdapter(private var listaProductos: List<Producto>) :
             holder.itemView.setOnClickListener(null)
         } else {
 
-            holder.tvProductoStock.text = "Stock: ${producto.stock}"
-            holder.tvProductoStock.setTextColor(Color.parseColor("#718096"))
+            holder.tvProductoStock.text = holder.itemView.context.getString(R.string.formato_stock, producto.stock)
+            holder.tvProductoStock.setTextColor(androidx.core.content.ContextCompat.getColor(holder.itemView.context, R.color.text_gray))
 
 
             holder.itemView.alpha = 1.0f
             holder.btnAccion.isEnabled = true
             holder.btnAccion.isClickable = true
 
-            holder.itemView.setOnClickListener {
-
+            holder.btnAccion.setOnClickListener {
+                onAgregarAlCarrito(producto)
             }
         }
     }

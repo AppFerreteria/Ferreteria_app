@@ -82,15 +82,15 @@ class RegistroActivity : AppCompatActivity() {
                         val userId = auth.currentUser?.uid
 
                         // Mapeo de datos para Firestore
-                        val usuarioData = hashMapOf(
-                            "nombre" to nombre,
-                            "email" to email,
-                            "telefono" to telefono
+                        val cliente = Cliente(
+                            nombre = nombre,
+                            email = email,
+                            telefono = telefono
                         )
 
                         if (userId != null) {
                             db.collection("usuarios").document(userId)
-                                .set(usuarioData)
+                                .set(cliente)
                                 .addOnSuccessListener {
                                     Toast.makeText(this, "Cuenta creada con éxito", Toast.LENGTH_SHORT).show()
 

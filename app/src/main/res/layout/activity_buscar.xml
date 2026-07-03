@@ -117,7 +117,7 @@
                         android:id="@+id/chipAbrirFiltros"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Filtros"
+                        android:text="@string/btn_filtros"
                         android:textColor="@color/white"
                         app:chipBackgroundColor="@color/brand_brown"
                         app:chipIconVisible="true" />
@@ -132,7 +132,7 @@
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="16dp"
-                android:text="Resultados de búsqueda"
+                android:text="@string/titulo_resultados_busqueda"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 android:textStyle="bold" />

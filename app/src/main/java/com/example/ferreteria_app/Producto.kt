@@ -4,6 +4,7 @@ data class Producto(
     val id: String = "",
     val nombre: String = "",
     val precio: Double = 0.0,
+    val sku: String = "",
     val imagenUrl: String = "",
     val categoria: String = "",
     val stock: Int = 0

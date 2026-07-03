@@ -31,10 +31,10 @@ class CategoriasAdapter(
 
         // Lógica de estado visual
         if (position == posicionSeleccionada) {
-            holder.tvCategoriaNombre.setTextColor(Color.parseColor("#E65100"))
+            holder.tvCategoriaNombre.setTextColor(androidx.core.content.ContextCompat.getColor(holder.itemView.context, R.color.text_category_selected))
             holder.tvCategoriaNombre.setTypeface(null, Typeface.BOLD)
         } else {
-            holder.tvCategoriaNombre.setTextColor(Color.parseColor("#4A3B32"))
+            holder.tvCategoriaNombre.setTextColor(androidx.core.content.ContextCompat.getColor(holder.itemView.context, R.color.text_brown))
             holder.tvCategoriaNombre.setTypeface(null, Typeface.NORMAL)
         }
 

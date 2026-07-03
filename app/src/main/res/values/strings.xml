@@ -14,7 +14,6 @@
     <string name="label_password">Contraseña</string>
     <string name="hint_password">Ingresa tu contraseña</string>
     <string name="btn_olvido_password">¿Olvidaste tu contraseña?</string>
-    <string name="btn_iniciar_sesion_login">Iniciar Sesión</string>
     <string name="btn_iniciar_sesion">Iniciar Sesión</string>
     <string name="separador_o">O</string>
     <string name="btn_crear_cuenta">Crear cuenta</string>
@@ -30,7 +29,6 @@
     <string name="label_confirmar_password">Confirmar contraseña</string>
     <string name="hint_asteriscos">........</string>
     <string name="texto_terminos">Acepto los Términos y Condiciones y la Política de Privacidad de Perez S.A.C.</string>
-    <string name="btn_crear_cuenta_submit">Crear cuenta</string>
     <string name="footer_ya_tienes_cuenta">¿Ya tienes una cuenta? Iniciar sesión</string>
 
     <string name="recuperar_titulo">Recuperar Contraseña</string>
@@ -59,6 +57,7 @@
     <string name="texto_sin_limite">Sin límite</string>
     <string name="chip_solo_stock">Solo en Stock</string>
     <string name="chip_en_stock">En Stock</string>
+    <string name="texto_cargando">Cargando...</string>
     <string name="categoria_todos">Todos</string>
 
     <string name="formato_precio">S/ %1$.2f</string>
@@ -99,4 +98,29 @@
     <string name="error_email_vacio">Debe ingresar su correo electrónico.</string>
     <string name="toast_recuperacion_enviada">Enlace enviado. Revise su bandeja de entrada o spam.</string>
     <string name="toast_recuperacion_error">Error al enviar el correo. Verifique que la dirección sea correcta.</string>
+    <string name="error_credenciales_vacias">Por favor, ingresa tu correo y contraseña</string>
+    <string name="toast_inicio_sesion_correcto">Inicio de sesión correcto</string>
+    <string name="toast_error_acceso">Error de acceso: %1$s</string>
+    <string name="toast_error_catalogo">Fallo al cargar catálogo</string>
+
+
+    <string name="titulo_carrito">Carrito de Compras</string>
+    <string name="subtitulo_carrito">Revisa tus productos antes de finalizar.</string>
+    <string name="titulo_resumen_orden">Resumen de Orden</string>
+    <string name="label_subtotal">Subtotal</string>
+    <string name="label_descuento">Descuento</string>
+    <string name="label_envio">Envío</string>
+    <string name="label_total_carrito">TOTAL\nInc. IGV</string>
+    <string name="btn_continuar_compra">Continuar compra</string>
+    <string name="texto_pago_seguro">Pago 100%% seguro y encriptado</string>
+    <string name="label_sku">SKU: %1$s</string>
+    <string name="simbolo_menos">-</string>
+    <string name="simbolo_mas">+</string>
+    <string name="toast_procesando_pago">Procesando pasarela de pago...</string>
+    <string name="toast_producto_agregado">Producto agregado al carrito</string>
+    <string name="error_agregar_carrito">Error al agregar el producto al carrito</string>
+    <string name="error_stock_maximo">No puedes agregar más unidades de este producto</string>
+    <string name="error_cargar_carrito">Error al cargar el carrito</string>
+    <string name="error_actualizar_cantidad">Error al actualizar la cantidad</string>
+    <string name="error_eliminar_producto">Error al eliminar el producto</string>
 </resources>

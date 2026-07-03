@@ -7,6 +7,7 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -66,7 +67,9 @@ class BuscarActivity : AppCompatActivity() {
 
         val rvResultados = findViewById<RecyclerView>(R.id.rvResultadosBusqueda)
         rvResultados.layoutManager = GridLayoutManager(this, 2)
-        adaptadorResultados = CatalogoAdapter(emptyList())
+        adaptadorResultados = CatalogoAdapter(emptyList()) { producto ->
+            agregarProductoAlCarrito(producto)
+        }
         rvResultados.adapter = adaptadorResultados
 
         chipAbrirFiltros.setOnClickListener {
@@ -136,16 +139,16 @@ class BuscarActivity : AppCompatActivity() {
         sliderPrecio.value = valorActualSlider.coerceIn(0f, precioMaximoCatalogo)
 
         if (sliderPrecio.value >= precioMaximoCatalogo) {
-            tvPrecioSeleccionado.text = "Sin límite"
+            tvPrecioSeleccionado.text = getString(R.string.texto_sin_limite)
         } else {
-            tvPrecioSeleccionado.text = "Max: S/ ${String.format("%.2f", sliderPrecio.value)}"
+            tvPrecioSeleccionado.text = getString(R.string.formato_max_precio, sliderPrecio.value)
         }
 
         sliderPrecio.addOnChangeListener { _, value, _ ->
             if (value >= precioMaximoCatalogo) {
-                tvPrecioSeleccionado.text = "Sin límite"
+                tvPrecioSeleccionado.text = getString(R.string.texto_sin_limite)
             } else {
-                tvPrecioSeleccionado.text = "Max: S/ ${String.format("%.2f", value)}"
+                tvPrecioSeleccionado.text = getString(R.string.formato_max_precio, value)
             }
         }
 
@@ -186,14 +189,14 @@ class BuscarActivity : AppCompatActivity() {
         }
 
         filtroPrecioMaximo?.let { max ->
-            agregarChipRemovible("Max S/ ${String.format("%.2f", max)}") {
+            agregarChipRemovible(getString(R.string.formato_max_precio, max)) {
                 filtroPrecioMaximo = null
                 ejecutarMotorDeFiltros()
             }
         }
 
         if (filtroSoloStock) {
-            agregarChipRemovible("En Stock") {
+            agregarChipRemovible(getString(R.string.chip_en_stock)) {
                 filtroSoloStock = false
                 ejecutarMotorDeFiltros()
             }
@@ -231,9 +234,9 @@ class BuscarActivity : AppCompatActivity() {
         }
 
         tvTituloResultados.text = if (textoBusquedaActual.isNotEmpty()) {
-            "Resultados para \"$textoBusquedaActual\""
+            getString(R.string.formato_resultados_para, textoBusquedaActual)
         } else {
-            "Explorar productos"
+            getString(R.string.titulo_explorar_productos)
         }
 
         adaptadorResultados.actualizarLista(listaResultante)
@@ -244,7 +247,7 @@ class BuscarActivity : AppCompatActivity() {
             .addOnSuccessListener { resultado ->
                 val listaDescargada = mutableListOf<Producto>()
                 for (documento in resultado) {
-                    val producto = documento.toObject(Producto::class.java)
+                    val producto = documento.toObject(Producto::class.java).copy(id = documento.id)
                     listaDescargada.add(producto)
                 }
                 listaProductosMaestra = listaDescargada
@@ -274,6 +277,13 @@ class BuscarActivity : AppCompatActivity() {
                 }
                 R.id.nav_buscar -> true
 
+                R.id.nav_carrito -> {
+                    val intent = Intent(this, CarritoActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                    true
+                }
+
                 R.id.nav_perfil -> {
                     val intent = Intent(this, PerfilActivity::class.java)
                     startActivity(intent)
@@ -283,5 +293,22 @@ class BuscarActivity : AppCompatActivity() {
                 else -> false
             }
         }
+    }
+
+    private fun agregarProductoAlCarrito(producto: Producto) {
+        val repo = CarritoRepository()
+        repo.agregarProducto(
+            producto = producto,
+            onSuccess = {
+                runOnUiThread {
+                    Toast.makeText(this, R.string.toast_producto_agregado, Toast.LENGTH_SHORT).show()
+                }
+            },
+            onError = { mensaje ->
+                runOnUiThread {
+                    Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show()
+                }
+            }
+        )
     }
 }

@@ -1,0 +1,77 @@
+@startuml
+title Diagrama de Objetos - Carrito de Compras (3 Capas)
+
+package "Capa Vista" {
+    object "activityCarrito : activity_carrito.xml"
+    object "itemCarrito : item_carrito.xml"
+}
+
+package "Capa Control" {
+    object "viewModel : CarritoViewModel"
+    object "repository : CarritoRepository"
+    object "adapter : CarritoAdapter"
+    object "carritoActivity : CarritoActivity"
+}
+
+package "Capa Modelo" {
+    object "carritoActual : Carrito" as carrito {
+        fechaCreacion = 01/07/2026 10:30
+        estado = ACTIVO
+        subtotal = 120.50
+        descuento = 0.00
+        costoEnvio = 15.00
+        total = 135.50
+    }
+
+    object "item1 : CarritoItem" as item1 {
+        nombre = Martillo
+        precio = 42.50
+        cantidad = 2
+    }
+
+    object "item2 : CarritoItem" as item2 {
+        nombre = Cemento
+        precio = 35.50
+        cantidad = 1
+    }
+
+    object "producto1 : Producto" as prod1 {
+        nombre = Martillo
+        precio = 42.50
+        sku = FER-MRT-001
+        imagenUrl = https://...
+        categoria = Herramientas
+        stock = 50
+    }
+
+    object "producto2 : Producto" as prod2 {
+        nombre = Cemento
+        precio = 35.50
+        sku = FER-CEM-002
+        imagenUrl = https://...
+        categoria = Construcción
+        stock = 200
+    }
+
+    object "configTienda : ConfiguracionTienda" as config {
+        costoEnvio = 15.00
+        umbralDescuento = 200.00
+        montoDescuento = 20.00
+    }
+
+    carrito --> item1 : contiene
+    carrito --> item2 : contiene
+    item1 --> prod1 : referencia a
+    item2 --> prod2 : referencia a
+    carrito --> config : aplica reglas
+}
+
+carritoActivity --> viewModel
+viewModel --> repository
+repository --> carrito
+adapter --> item1
+adapter --> item2
+carritoActivity --> activityCarrito
+adapter --> itemCarrito
+
+@enduml

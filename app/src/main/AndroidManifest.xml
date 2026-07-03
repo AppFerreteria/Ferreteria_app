@@ -26,22 +26,22 @@
             android:name=".BuscarActivity"
             android:exported="false" />
         <activity
-            android:name=".RecuperarPasswordActivity"
-            android:exported="false" />
-        <activity
             android:name=".RegistroActivity"
             android:exported="false" />
         <activity
             android:name=".CatalogoActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".IniciarSesionActivity"
             android:exported="false" />
         <activity
             android:name=".ClienteActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".CarritoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PrincipalActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -51,7 +51,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Hola,"
+                android:text="@string/saludo_usuario"
                 android:textColor="#A0AEC0"
                 android:textSize="14sp" />
 
@@ -59,7 +59,7 @@
                 android:id="@+id/tvNombreUsuario"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Usuario"
+                android:text="@string/usuario_default"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -115,7 +115,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
-                android:text="Categorías"
+                android:text="@string/titulo_categorias"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -132,7 +132,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
-                android:text="Productos Destacados"
+                android:text="@string/titulo_productos_destacados"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 android:textStyle="bold" />

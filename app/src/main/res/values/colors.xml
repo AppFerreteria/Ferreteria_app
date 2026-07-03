@@ -15,4 +15,12 @@
     <color name="text_gray">#718096</color>
     <color name="red_error">#E53935</color>
     <color name="tint_placeholder">#D1D5DB</color>
+    <color name="text_category_selected">#E65100</color>
+    <color name="text_brown">#4A3B32</color>
+
+    <color name="bg_carrito">#F8F9FA</color>
+    <color name="divider_gray">#E0E0E0</color>
+    <color name="red_delete">#D32F2F</color>
+    <color name="bg_image_placeholder">#F0F0F0</color>
+    <color name="green_descuento">#2E7D32</color>
 </resources>

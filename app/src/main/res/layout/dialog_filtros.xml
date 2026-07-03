@@ -10,7 +10,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Filtros de Búsqueda"
+        android:text="@string/titulo_dialogo_filtros"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold" />
@@ -19,7 +19,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="Categoría"
+        android:text="@string/label_categoria"
         android:textColor="@color/brand_brown"
         android:textStyle="bold" />
 
@@ -41,7 +41,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Precio Máximo"
+            android:text="@string/label_precio_maximo"
             android:textColor="@color/brand_brown"
             android:textStyle="bold" />
 
@@ -49,7 +49,7 @@
             android:id="@+id/tvPrecioSeleccionado"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cargando..."
+            android:text="@string/texto_cargando"
             android:textColor="@color/brand_orange"
             android:textStyle="bold" />
     </LinearLayout>
@@ -68,7 +68,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Disponibilidad"
+        android:text="@string/label_disponibilidad"
         android:textColor="@color/brand_brown"
         android:textStyle="bold" />
 
@@ -85,7 +85,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checkable="true"
-            android:text="Solo en Stock" />
+            android:text="@string/chip_solo_stock" />
     </com.google.android.material.chip.ChipGroup>
 
     <com.google.android.material.button.MaterialButton
@@ -93,7 +93,7 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_marginTop="32dp"
-        android:text="Aplicar Filtros"
+        android:text="@string/btn_aplicar_filtros"
         android:textAllCaps="false"
         app:backgroundTint="@color/brand_orange"
         app:cornerRadius="12dp" />

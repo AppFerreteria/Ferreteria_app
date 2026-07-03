@@ -47,12 +47,11 @@ class PerfilActivity : AppCompatActivity() {
             db.collection("usuarios").document(uid).get()
                 .addOnSuccessListener { doc ->
                     if (doc.exists()) {
-                        findViewById<TextView>(R.id.tvNombrePerfil).text = doc.getString("nombre")
+                        val cliente = doc.toObject(Cliente::class.java) ?: Cliente()
+                        findViewById<TextView>(R.id.tvNombrePerfil).text = cliente.nombre
                         findViewById<TextView>(R.id.tvEmailPerfil).text = auth.currentUser?.email
-
-                        val telefono = doc.getString("telefono")
                         findViewById<TextView>(R.id.tvTelefonoPerfil).text =
-                            if (!telefono.isNullOrEmpty()) telefono else getString(R.string.texto_sin_telefono)
+                            if (cliente.telefono.isNotEmpty()) cliente.telefono else getString(R.string.texto_sin_telefono)
                     }
                 }
         }
@@ -60,7 +59,7 @@ class PerfilActivity : AppCompatActivity() {
 
     private fun cerrarSesion() {
         auth.signOut()
-        val intent = Intent(this, LoginActivity::class.java)
+        val intent = Intent(this, IniciarSesionActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         finish()
@@ -80,6 +79,11 @@ class PerfilActivity : AppCompatActivity() {
                 }
                 R.id.nav_buscar -> {
                     startActivity(Intent(this, BuscarActivity::class.java))
+                    finish()
+                    true
+                }
+                R.id.nav_carrito -> {
+                    startActivity(Intent(this, CarritoActivity::class.java))
                     finish()
                     true
                 }

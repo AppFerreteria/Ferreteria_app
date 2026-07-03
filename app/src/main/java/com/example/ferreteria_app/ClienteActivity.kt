@@ -23,7 +23,7 @@ class ClienteActivity : AppCompatActivity() {
         //Navegación al login
         val btnLogin = findViewById<MaterialButton>(R.id.btnLogin)
         btnLogin.setOnClickListener {
-            val intent = Intent(this, LoginActivity::class.java)
+            val intent = Intent(this, IniciarSesionActivity::class.java)
             startActivity(intent)
         }
 
