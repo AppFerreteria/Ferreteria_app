@@ -106,6 +106,12 @@ class CarritoActivity : AppCompatActivity() {
                     finish()
                     true
                 }
+                R.id.nav_pedidos -> {
+                    startActivity(Intent(this, PedidoActivity::class.java))
+                    finish()
+                    true
+                }
+
                 R.id.nav_perfil -> {
                     startActivity(Intent(this, PerfilActivity::class.java))
                     finish()

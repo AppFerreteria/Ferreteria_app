@@ -41,6 +41,9 @@
             android:name=".CarritoActivity"
             android:exported="false" />
         <activity
+            android:name=".PedidoActivity"
+            android:exported="false" />
+        <activity
             android:name=".PrincipalActivity"
             android:exported="true">
             <intent-filter>

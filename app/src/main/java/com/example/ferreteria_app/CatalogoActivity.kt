@@ -80,6 +80,11 @@ class CatalogoActivity : AppCompatActivity() {
                     true
                 }
 
+                R.id.nav_pedidos -> {
+                    startActivity(Intent(this, PedidoActivity::class.java))
+                    true
+                }
+
                 R.id.nav_perfil -> {
                     startActivity(Intent(this, PerfilActivity::class.java))
                     true
