@@ -284,6 +284,13 @@ class BuscarActivity : AppCompatActivity() {
                     true
                 }
 
+                R.id.nav_pedidos -> {
+                    val intent = Intent(this, PedidoActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                    true
+                }
+
                 R.id.nav_perfil -> {
                     val intent = Intent(this, PerfilActivity::class.java)
                     startActivity(intent)
