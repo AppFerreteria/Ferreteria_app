@@ -6,7 +6,7 @@ plugins {
 android {
     namespace = "com.example.ferreteria_app"
     compileSdk {
-        version = release(36){
+        version = release(36) {
             minorApiLevel = 1
         }
     }
