@@ -113,43 +113,14 @@
         app:layout_constraintTop_toBottomOf="@id/tvNumeroPedidoSeguimiento"
         tools:visibility="visible">
 
-        <!--
-            PLACEHOLDER DE MAPA:
-            Reemplazar este FrameLayout por un com.google.android.gms.maps.MapView
-            cuando se configure la API Key de Google Maps (build.gradle + manifest).
-            Mientras tanto, ivMarcadorRepartidor + tvUbicacionRepartidor muestran
-            que el listener de Firestore SÍ está funcionando en tiempo real.
-        -->
-        <FrameLayout
-            android:id="@+id/flMapaPlaceholder"
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="0dp"
             android:layout_height="260dp"
-            android:background="@drawable/bg_mapa_placeholder"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:id="@+id/ivMarcadorRepartidor"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center"
-                android:padding="8dp"
-                android:background="@drawable/bg_badge_pill"
-                android:backgroundTint="@color/white"
-                android:elevation="4dp"
-                android:src="@drawable/ic_repartidor"
-                app:tint="@color/brand_orange" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|center_horizontal"
-                android:layout_marginBottom="8dp"
-                android:text="@string/texto_placeholder_mapa"
-                android:textColor="@color/text_hint_gray"
-                android:textSize="11sp" />
-        </FrameLayout>
+            app:layout_constraintEnd_toEndOf="parent"/>
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="0dp"
@@ -161,7 +132,7 @@
             app:strokeWidth="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/flMapaPlaceholder">
+            app:layout_constraintTop_toBottomOf="@id/map">
 
             <LinearLayout
                 android:layout_width="match_parent"

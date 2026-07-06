@@ -10,9 +10,18 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
 import java.util.Locale
 
-class MapaSeguimientoActivity : AppCompatActivity() {
+class MapaSeguimientoActivity :
+    AppCompatActivity(),
+    OnMapReadyCallback {
 
     companion object {
         const val EXTRA_PEDIDO_ID = "pedidoId"
@@ -21,6 +30,9 @@ class MapaSeguimientoActivity : AppCompatActivity() {
     private val db = FirebaseFirestore.getInstance()
     private var pedidoListener: ListenerRegistration? = null
     private var repartidorListener: ListenerRegistration? = null
+
+    private lateinit var googleMap: GoogleMap
+    private var marker: Marker? = null
 
     private lateinit var tvNumeroPedido: TextView
     private lateinit var clEstadoPreparacion: View
@@ -53,15 +65,15 @@ class MapaSeguimientoActivity : AppCompatActivity() {
             finish()
             return
         }
+        val mapFragment =
+            supportFragmentManager.findFragmentById(R.id.map)
+                    as SupportMapFragment
+
+        mapFragment.getMapAsync(this)
 
         escucharPedido(pedidoId)
-    }
 
-    /**
-     * Listener fijo sobre el pedido: nunca se desactiva mientras la pantalla esté abierta.
-     * Así, si el repartidor entrega justo cuando el cliente está mirando el mapa,
-     * el estado cambia de en_camino a entregado en vivo, sin recargar nada.
-     */
+    }
     private fun escucharPedido(pedidoId: String) {
         pedidoListener = db.collection("pedidos").document(pedidoId)
             .addSnapshotListener { snapshot, error ->
@@ -79,9 +91,14 @@ class MapaSeguimientoActivity : AppCompatActivity() {
                         escucharUbicacionRepartidor(pedido.repartidorId)
                     }
                     EstadoPedido.ENTREGADO -> {
+
                         mostrarVista(clEstadoEntregado)
-                        repartidorListener?.remove() // por si venía activo antes
+
+                        repartidorListener?.remove()
                         repartidorListener = null
+
+                        marker?.remove()
+                        marker = null
                     }
                     else -> {
                         // PENDIENTE o PREPARACION: aún no hay repartidor en ruta
@@ -114,6 +131,10 @@ class MapaSeguimientoActivity : AppCompatActivity() {
                 val repartidor = snapshot.toObject(Repartidor::class.java)
                 val geo = repartidor?.ubicacionActual
 
+                if (!::googleMap.isInitialized) {
+                    return@addSnapshotListener
+                }
+
                 tvUbicacionRepartidor.text = if (geo != null) {
                     getString(
                         R.string.label_ubicacion_repartidor,
@@ -123,8 +144,38 @@ class MapaSeguimientoActivity : AppCompatActivity() {
                     getString(R.string.texto_esperando_ubicacion)
                 }
 
-                // TODO: cuando se conecte el MapView real, aquí se actualiza el marcador:
-                // googleMap.animateCamera / marker.position = LatLng(geo.latitude, geo.longitude)
+                if (geo != null) {
+
+                    val posicion = LatLng(
+                        geo.latitude,
+                        geo.longitude
+                    )
+
+                    if (marker == null) {
+
+                        marker = googleMap.addMarker(
+                            MarkerOptions()
+                                .position(posicion)
+                                .title("Repartidor")
+                        )
+
+                        googleMap.moveCamera(
+                            CameraUpdateFactory.newLatLngZoom(
+                                posicion,
+                                16f
+                            )
+                        )
+
+                    } else {
+
+                        marker?.position = posicion
+
+                        googleMap.animateCamera(
+                            CameraUpdateFactory.newLatLng(posicion)
+                        )
+
+                    }
+                }
             }
     }
 
@@ -132,6 +183,22 @@ class MapaSeguimientoActivity : AppCompatActivity() {
         clEstadoPreparacion.visibility = if (vistaVisible == clEstadoPreparacion) View.VISIBLE else View.GONE
         clMapaEnCamino.visibility = if (vistaVisible == clMapaEnCamino) View.VISIBLE else View.GONE
         clEstadoEntregado.visibility = if (vistaVisible == clEstadoEntregado) View.VISIBLE else View.GONE
+    }
+
+    override fun onMapReady(map: GoogleMap) {
+
+        googleMap = map
+
+        googleMap.uiSettings.isZoomControlsEnabled = true
+        googleMap.uiSettings.isCompassEnabled = true
+        googleMap.uiSettings.isMapToolbarEnabled = true
+
+        googleMap.moveCamera(
+            CameraUpdateFactory.newLatLngZoom(
+                LatLng(-12.0464, -77.0428),
+                14f
+            )
+        )
     }
 
     override fun onDestroy() {
