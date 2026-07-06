@@ -23,4 +23,13 @@
     <color name="red_delete">#D32F2F</color>
     <color name="bg_image_placeholder">#F0F0F0</color>
     <color name="green_descuento">#2E7D32</color>
+
+    <color name="bg_badge_pendiente">@color/bg_blob_orange</color>
+    <color name="text_badge_pendiente">@color/text_category_selected</color>
+    <color name="bg_badge_preparacion">#E3E8FD</color>
+    <color name="text_badge_preparacion">#3F51B5</color>
+    <color name="bg_badge_en_camino">#E0F2FE</color>
+    <color name="text_badge_en_camino">#0284C7</color>
+    <color name="bg_badge_entregado">#E3F5E6</color>
+    <color name="text_badge_entregado">@color/green_descuento</color>
 </resources>
