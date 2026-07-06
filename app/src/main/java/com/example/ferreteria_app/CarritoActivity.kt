@@ -27,6 +27,7 @@ class CarritoActivity : AppCompatActivity() {
     private lateinit var tvSubtotal: TextView
     private lateinit var tvDescuento: TextView
     private lateinit var tvEnvio: TextView
+    private var carritoActual: Carrito = Carrito()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +52,12 @@ class CarritoActivity : AppCompatActivity() {
         observarCarrito()
 
         findViewById<MaterialButton>(R.id.btnContinuarCompra).setOnClickListener {
-            Toast.makeText(this, getString(R.string.toast_procesando_pago), Toast.LENGTH_SHORT).show()
+            if (carritoActual.items.isEmpty()) {
+                Toast.makeText(this, "Tu carrito está vacío", Toast.LENGTH_SHORT).show()
+            } else {
+                CheckoutSession.iniciar(carritoActual)
+                startActivity(Intent(this, ResumenPedidoActivity::class.java))
+            }
         }
     }
 
@@ -71,6 +77,7 @@ class CarritoActivity : AppCompatActivity() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.carritoState.collect { carrito ->
+                    carritoActual = carrito
                     adaptador.actualizarLista(carrito.items)
                     tvTotalFinal.text = getString(R.string.formato_precio, carrito.total)
                     tvSubtotal.text = getString(R.string.formato_precio, carrito.subtotal)
