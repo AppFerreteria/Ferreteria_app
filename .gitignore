@@ -15,7 +15,7 @@ local.properties
 # Archivos de registro y temporales
 *.iml
 *.log
-.DS_Store
+*.DS_Store
 
 # Archivos temporales de compilación
 buildOutputCleanup/
