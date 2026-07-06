@@ -57,7 +57,7 @@
     <string name="texto_sin_limite">Sin límite</string>
     <string name="chip_solo_stock">Solo en Stock</string>
     <string name="chip_en_stock">En Stock</string>
-    <string name="texto_cargando">Cargando...</string>
+    <string name="texto_cargando">Cargando…</string>
     <string name="categoria_todos">Todos</string>
 
     <string name="formato_precio">S/ %1$.2f</string>

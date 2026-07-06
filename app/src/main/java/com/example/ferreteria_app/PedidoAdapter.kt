@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import java.text.SimpleDateFormat
@@ -67,7 +68,6 @@ class PedidoAdapter(
             ColorStateList.valueOf(ContextCompat.getColor(context, colorFondo))
         holder.tvBadgeEstado.setTextColor(ContextCompat.getColor(context, colorTexto))
 
-        // El botón de seguimiento solo aplica a pedidos que aún no llegan al cliente
         if (pedido.estado == EstadoPedido.ENTREGADO) {
             holder.btnSeguirPedido.visibility = View.GONE
         } else {
@@ -79,12 +79,35 @@ class PedidoAdapter(
     override fun getItemCount(): Int = lista.size
 
     fun actualizarLista(nuevaLista: List<Pedido>) {
+        val diffCallback = PedidoDiffCallback(lista, nuevaLista)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
         this.lista = nuevaLista
-        notifyDataSetChanged()
+        diffResult.dispatchUpdatesTo(this)
     }
 
     private fun formatearFecha(fechaMillis: Long): String {
-        val formato = SimpleDateFormat("dd 'de' MMMM, yyyy", Locale("es", "PE"))
+        // Usar Builder en lugar del constructor deprecated
+        val locale = Locale.Builder()
+            .setLanguage("es")
+            .setRegion("PE")
+            .build()
+        val formato = SimpleDateFormat("dd 'de' MMMM, yyyy", locale)
         return formato.format(fechaMillis)
+    }
+
+    private class PedidoDiffCallback(
+        private val oldList: List<Pedido>,
+        private val newList: List<Pedido>
+    ) : DiffUtil.Callback() {
+        override fun getOldListSize(): Int = oldList.size
+        override fun getNewListSize(): Int = newList.size
+
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return oldList[oldItemPosition].id == newList[newItemPosition].id
+        }
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return oldList[oldItemPosition] == newList[newItemPosition]
+        }
     }
 }
