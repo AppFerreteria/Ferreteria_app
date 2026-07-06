@@ -17,7 +17,6 @@ local.properties
 *.log
 .DS_Store
 
-
 # Archivos temporales de compilación
 buildOutputCleanup/
 outputfiles.bin
