@@ -44,6 +44,9 @@
             android:name=".PedidoActivity"
             android:exported="false" />
         <activity
+            android:name=".MapaSeguimientoActivity"
+            android:exported="false" />
+        <activity
             android:name=".PrincipalActivity"
             android:exported="true">
             <intent-filter>

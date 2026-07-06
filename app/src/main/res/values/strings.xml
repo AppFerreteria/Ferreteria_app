@@ -68,6 +68,16 @@
     <string name="btn_editar_perfil">Editar Perfil</string>
     <string name="titulo_pedidos">Mis Pedidos</string>
     <string name="subtitulo_pedidos">Ver historial</string>
+    <string name="subtitulo_historial_pedidos">Rastrea y gestiona tus compras recientes</string>
+    <string name="badge_pendiente">Pendiente</string>
+    <string name="badge_preparacion">Preparando</string>
+    <string name="badge_en_camino">En camino</string>
+    <string name="badge_entregado">Entregado</string>
+    <string name="label_numero_pedido">Pedido #%1$s</string>
+    <string name="btn_seguir_pedido">Seguir Pedido</string>
+    <string name="texto_sin_pedidos">Aún no tienes pedidos registrados</string>
+    <string name="toast_seguimiento_no_disponible">El seguimiento en mapa estará disponible próximamente</string>
+    <string name="error_cargar_pedidos">Error al cargar tus pedidos</string>
     <string name="titulo_direcciones">Mis Direcciones</string>
     <string name="subtitulo_direcciones">Gestionar entregas</string>
     <string name="titulo_configuracion">Configuración</string>
@@ -123,4 +133,16 @@
     <string name="error_cargar_carrito">Error al cargar el carrito</string>
     <string name="error_actualizar_cantidad">Error al actualizar la cantidad</string>
     <string name="error_eliminar_producto">Error al eliminar el producto</string>
+
+    <string name="titulo_seguimiento_pedido">Seguimiento de Pedido</string>
+    <string name="estado_preparacion_titulo">Tu pedido está en preparación</string>
+    <string name="estado_preparacion_subtitulo">Te avisaremos en cuanto salga con el repartidor.</string>
+    <string name="estado_en_camino_titulo">Tu pedido va en camino</string>
+    <string name="estado_en_camino_subtitulo">El repartidor está actualizando su ubicación en tiempo real.</string>
+    <string name="estado_entregado_titulo">¡Pedido entregado!</string>
+    <string name="estado_entregado_subtitulo">Gracias por tu compra en Perez S.A.C.</string>
+    <string name="label_ubicacion_repartidor">Ubicación del repartidor: %1$s</string>
+    <string name="texto_esperando_ubicacion">Esperando la primera ubicación del repartidor…</string>
+    <string name="texto_placeholder_mapa">Vista de mapa (pendiente de conectar Google Maps SDK)</string>
+    <string name="error_pedido_no_encontrado">No se pudo cargar este pedido</string>
 </resources>
