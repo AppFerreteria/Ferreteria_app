@@ -13,6 +13,28 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Ferreteria_app">
+
+        <activity
+            android:name=".ComprobanteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ResultadoPagoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProcesandoPagoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TarjetaPagoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".YapePagoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MetodoPagoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ResumenPedidoActivity"
+            android:exported="false" />
         <activity
             android:name=".RecuperarActivity"
             android:exported="false" />
