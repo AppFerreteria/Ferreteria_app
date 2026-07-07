@@ -1,0 +1,33 @@
+@startuml
+title Diagrama de Navegabilidad - Revisar Carrito de Compras
+
+rectangle "Menú Inferior\nmenu_navegacion.xml" as menu
+
+rectangle "CatalogoActivity" as catalogo
+rectangle "BuscarActivity" as buscar
+rectangle "CarritoActivity" as carrito
+rectangle "PerfilActivity" as perfil
+
+rectangle "Pasarela de Pago\n(no implementada)" as pago
+
+menu --> catalogo : nav_inicio
+menu --> buscar : nav_buscar
+menu --> carrito : nav_carrito
+menu --> perfil : nav_perfil
+
+catalogo --> menu
+buscar --> menu
+carrito --> menu
+perfil --> menu
+
+carrito --> pago : btnContinuarCompra
+
+note right of carrito
+  Acciones dentro de CarritoActivity:
+  • Modificar cantidad (+/-)
+  • Eliminar item
+  • Ver resumen
+  • Continuar compra → Pasarela de Pago
+end note
+
+@enduml

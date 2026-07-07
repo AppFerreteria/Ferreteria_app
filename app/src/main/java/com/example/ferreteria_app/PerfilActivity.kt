@@ -87,6 +87,13 @@ class PerfilActivity : AppCompatActivity() {
                     finish()
                     true
                 }
+
+                R.id.nav_pedidos -> {
+                    startActivity(Intent(this, PedidoActivity::class.java))
+                    finish()
+                    true
+                }
+
                 else -> true
             }
         }

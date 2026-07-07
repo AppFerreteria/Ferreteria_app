@@ -109,7 +109,8 @@ class CarritoRepository {
                         idProducto = producto.id,
                         nombre = producto.nombre,
                         precio = producto.precio,
-                        cantidad = 1
+                        cantidad = 1,
+                        imagenUrl = producto.imagenUrl
                     )
                     itemDoc.set(item)
                         .addOnSuccessListener { onSuccess() }

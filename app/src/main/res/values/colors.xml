@@ -23,4 +23,29 @@
     <color name="red_delete">#D32F2F</color>
     <color name="bg_image_placeholder">#F0F0F0</color>
     <color name="green_descuento">#2E7D32</color>
+
+    <color name="blue_primary">#1565C0</color>
+    <color name="blue_dark">#0D47A1</color>
+    <color name="orange_accent">#F57C00</color>
+    <color name="green_success">#43A047</color>
+    <color name="green_dark">#2E7D32</color>
+    <color name="purple_yape">#6B1E8F</color>
+    <color name="payment_background">#F5F6FA</color>
+    <color name="payment_text_dark">#1A1A2E</color>
+    <color name="payment_text_gray">#6B7280</color>
+    <color name="border_light">#E3EAF6</color>
+    <color name="light_blue">#EAF2FF</color>
+    <color name="light_green">#EAF7EE</color>
+    <color name="light_red">#FDECEC</color>
+    <color name="light_orange">#FFF3E0</color>
+    <color name="light_purple">#F4E8FA</color>
+
+    <color name="bg_badge_pendiente">@color/bg_blob_orange</color>
+    <color name="text_badge_pendiente">@color/text_category_selected</color>
+    <color name="bg_badge_preparacion">#E3E8FD</color>
+    <color name="text_badge_preparacion">#3F51B5</color>
+    <color name="bg_badge_en_camino">#E0F2FE</color>
+    <color name="text_badge_en_camino">#0284C7</color>
+    <color name="bg_badge_entregado">#E3F5E6</color>
+    <color name="text_badge_entregado">@color/green_descuento</color>
 </resources>

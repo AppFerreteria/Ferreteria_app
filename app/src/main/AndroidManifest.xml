@@ -13,6 +13,28 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Ferreteria_app">
+
+        <activity
+            android:name=".ComprobanteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ResultadoPagoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProcesandoPagoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TarjetaPagoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".YapePagoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MetodoPagoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ResumenPedidoActivity"
+            android:exported="false" />
         <activity
             android:name=".RecuperarActivity"
             android:exported="false" />
@@ -25,6 +47,9 @@
         <activity
             android:name=".BuscarActivity"
             android:exported="false" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="TU_API_KEY"/>
         <activity
             android:name=".RegistroActivity"
             android:exported="false" />
@@ -39,6 +64,12 @@
             android:exported="false" />
         <activity
             android:name=".CarritoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PedidoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MapaSeguimientoActivity"
             android:exported="false" />
         <activity
             android:name=".PrincipalActivity"

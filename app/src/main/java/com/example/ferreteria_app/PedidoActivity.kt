@@ -2,6 +2,7 @@ package com.example.ferreteria_app
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -15,26 +16,20 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.launch
 
-class CarritoActivity : AppCompatActivity() {
+class PedidoActivity : AppCompatActivity() {
 
-    private lateinit var adaptador: CarritoAdapter
-    private lateinit var viewModel: CarritoViewModel
-
-    private lateinit var tvTotalFinal: TextView
-    private lateinit var tvSubtotal: TextView
-    private lateinit var tvDescuento: TextView
-    private lateinit var tvEnvio: TextView
-    private var carritoActual: Carrito = Carrito()
+    private lateinit var adaptador: PedidoAdapter
+    private lateinit var viewModel: PedidoViewModel
+    private lateinit var tvSinPedidos: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_carrito)
+        setContentView(R.layout.activity_pedido)
 
-        viewModel = ViewModelProvider(this)[CarritoViewModel::class.java]
+        viewModel = ViewModelProvider(this)[PedidoViewModel::class.java]
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -42,47 +37,34 @@ class CarritoActivity : AppCompatActivity() {
             insets
         }
 
-        tvTotalFinal = findViewById(R.id.tvTotalFinal)
-        tvSubtotal = findViewById(R.id.tvSubtotal)
-        tvDescuento = findViewById(R.id.tvDescuento)
-        tvEnvio = findViewById(R.id.tvEnvio)
+        tvSinPedidos = findViewById(R.id.tvSinPedidos)
 
         configurarRecyclerView()
         configurarNavegacionInferior()
-        observarCarrito()
-
-        findViewById<MaterialButton>(R.id.btnContinuarCompra).setOnClickListener {
-            if (carritoActual.items.isEmpty()) {
-                Toast.makeText(this, "Tu carrito está vacío", Toast.LENGTH_SHORT).show()
-            } else {
-                CheckoutSession.iniciar(carritoActual)
-                startActivity(Intent(this, ResumenPedidoActivity::class.java))
-            }
-        }
+        observarPedidos()
     }
 
     private fun configurarRecyclerView() {
-        val rv = findViewById<RecyclerView>(R.id.rvListaCarrito)
+        val rv = findViewById<RecyclerView>(R.id.rvListaPedidos)
         rv.layoutManager = LinearLayoutManager(this)
 
-        adaptador = CarritoAdapter(
+        adaptador = PedidoAdapter(
             lista = emptyList(),
-            onCambiarCantidad = { item, nuevaCantidad -> viewModel.actualizarCantidad(item, nuevaCantidad) },
-            onEliminar = { item -> viewModel.eliminarItem(item) }
+            onSeguirPedido = { pedido ->
+                val intent = Intent(this, MapaSeguimientoActivity::class.java)
+                intent.putExtra(MapaSeguimientoActivity.EXTRA_PEDIDO_ID, pedido.id)
+                startActivity(intent)
+            }
         )
         rv.adapter = adaptador
     }
 
-    private fun observarCarrito() {
+    private fun observarPedidos() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.carritoState.collect { carrito ->
-                    carritoActual = carrito
-                    adaptador.actualizarLista(carrito.items)
-                    tvTotalFinal.text = getString(R.string.formato_precio, carrito.total)
-                    tvSubtotal.text = getString(R.string.formato_precio, carrito.subtotal)
-                    tvDescuento.text = getString(R.string.formato_precio, carrito.descuento)
-                    tvEnvio.text = getString(R.string.formato_precio, carrito.costoEnvio)
+                viewModel.pedidosState.collect { pedidos ->
+                    adaptador.actualizarLista(pedidos)
+                    tvSinPedidos.visibility = if (pedidos.isEmpty()) View.VISIBLE else View.GONE
                 }
             }
         }
@@ -99,8 +81,8 @@ class CarritoActivity : AppCompatActivity() {
     }
 
     private fun configurarNavegacionInferior() {
-        val nav = findViewById<BottomNavigationView>(R.id.bottomNavigationCarrito)
-        nav.selectedItemId = R.id.nav_carrito
+        val nav = findViewById<BottomNavigationView>(R.id.bottomNavigationPedidos)
+        nav.selectedItemId = R.id.nav_pedidos
         nav.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_inicio -> {
@@ -113,12 +95,11 @@ class CarritoActivity : AppCompatActivity() {
                     finish()
                     true
                 }
-                R.id.nav_pedidos -> {
-                    startActivity(Intent(this, PedidoActivity::class.java))
+                R.id.nav_carrito -> {
+                    startActivity(Intent(this, CarritoActivity::class.java))
                     finish()
                     true
                 }
-
                 R.id.nav_perfil -> {
                     startActivity(Intent(this, PerfilActivity::class.java))
                     finish()
