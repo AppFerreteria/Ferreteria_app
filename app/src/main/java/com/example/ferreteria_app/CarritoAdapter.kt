@@ -35,6 +35,11 @@ class CarritoAdapter(
         holder.tvNombre.text = item.nombre
         holder.tvPrecio.text = holder.itemView.context.getString(R.string.formato_precio, item.precio * item.cantidad)
         holder.tvCantidad.text = item.cantidad.toString()
+        if (item.imagenUrl.isNotEmpty()) {
+            holder.ivImagen.load(item.imagenUrl) { crossfade(true) }
+        } else {
+            holder.ivImagen.setImageResource(R.drawable.ic_martillo)
+        }
 
         holder.btnRestar.setOnClickListener {
             if (item.cantidad > 1) {
