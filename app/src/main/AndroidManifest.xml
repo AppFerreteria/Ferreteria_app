@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
 
     <application
         android:allowBackup="true"
@@ -14,6 +16,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Ferreteria_app">
 
+        <activity
+            android:name=".EntregaCompletadaRepartidorActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ConfirmacionExitosaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".GenerarQRActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RepartidorPedidosActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EscaneoQRActivity"
+            android:exported="false" />
         <activity
             android:name=".ComprobanteActivity"
             android:exported="false" />

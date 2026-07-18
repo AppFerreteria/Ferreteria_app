@@ -14,7 +14,9 @@ import java.util.Locale
 
 class PedidoAdapter(
     private var lista: List<Pedido>,
-    private val onSeguirPedido: (Pedido) -> Unit
+    private val isRepartidor: Boolean = false,
+    private val onSeguirPedido: (Pedido) -> Unit,
+    private val onAceptarPedido: ((Pedido) -> Unit)? = null
 ) : RecyclerView.Adapter<PedidoAdapter.PedidoViewHolder>() {
 
     class PedidoViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -72,7 +74,24 @@ class PedidoAdapter(
             holder.btnSeguirPedido.visibility = View.GONE
         } else {
             holder.btnSeguirPedido.visibility = View.VISIBLE
-            holder.btnSeguirPedido.setOnClickListener { onSeguirPedido(pedido) }
+            if (isRepartidor) {
+                // Comprobación más robusta del estado (ignorando mayúsculas/minúsculas)
+                if (pedido.estado.equals(EstadoPedido.PENDIENTE, ignoreCase = true) || 
+                    pedido.estado.equals(EstadoPedido.PREPARACION, ignoreCase = true)) {
+
+                    holder.btnSeguirPedido.text = "Tomar pedido"
+                    holder.btnSeguirPedido.setIconResource(R.drawable.ic_send)
+                    holder.btnSeguirPedido.setOnClickListener { onAceptarPedido?.invoke(pedido) }
+                } else {
+                    holder.btnSeguirPedido.text = context.getString(R.string.btn_generar_qr)
+                    holder.btnSeguirPedido.setIconResource(R.drawable.ic_tools)
+                    holder.btnSeguirPedido.setOnClickListener { onSeguirPedido(pedido) }
+                }
+            } else {
+                holder.btnSeguirPedido.text = context.getString(R.string.btn_seguir_pedido)
+                holder.btnSeguirPedido.setIconResource(R.drawable.ic_repartidor)
+                holder.btnSeguirPedido.setOnClickListener { onSeguirPedido(pedido) }
+            }
         }
     }
 

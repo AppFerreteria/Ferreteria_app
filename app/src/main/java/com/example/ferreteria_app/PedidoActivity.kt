@@ -48,8 +48,13 @@ class PedidoActivity : AppCompatActivity() {
         val rv = findViewById<RecyclerView>(R.id.rvListaPedidos)
         rv.layoutManager = LinearLayoutManager(this)
 
+        // Verificamos el rol del usuario para configurar el adaptador correctamente
+        val db = com.google.firebase.firestore.FirebaseFirestore.getInstance()
+        val uid = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid
+
         adaptador = PedidoAdapter(
             lista = emptyList(),
+            isRepartidor = false, // Por defecto cliente
             onSeguirPedido = { pedido ->
                 val intent = Intent(this, MapaSeguimientoActivity::class.java)
                 intent.putExtra(MapaSeguimientoActivity.EXTRA_PEDIDO_ID, pedido.id)
@@ -57,6 +62,29 @@ class PedidoActivity : AppCompatActivity() {
             }
         )
         rv.adapter = adaptador
+
+        // Si es repartidor, actualizamos el comportamiento del adaptador
+        uid?.let {
+            db.collection("usuarios").document(it).get().addOnSuccessListener { doc ->
+                val rol = doc.getString("rol")
+                if (rol == "REPARTIDOR") {
+                    adaptador = PedidoAdapter(
+                        lista = emptyList(),
+                        isRepartidor = true,
+                        onSeguirPedido = { pedido ->
+                            val intent = Intent(this, GenerarQRActivity::class.java)
+                            intent.putExtra("pedidoId", pedido.id)
+                            startActivity(intent)
+                        },
+                        onAceptarPedido = { pedido ->
+                            viewModel.actualizarEstado(pedido.id, EstadoPedido.EN_CAMINO)
+                        }
+                    )
+                    rv.adapter = adaptador
+                    viewModel.iniciarEscuchaRepartidor()
+                }
+            }
+        }
     }
 
     private fun observarPedidos() {

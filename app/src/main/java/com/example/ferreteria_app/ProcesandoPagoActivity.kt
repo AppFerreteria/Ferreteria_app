@@ -6,8 +6,12 @@ import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 class ProcesandoPagoActivity : AppCompatActivity() {
     private val pasarela = PasarelaPagosRepository()
@@ -27,23 +31,33 @@ class ProcesandoPagoActivity : AppCompatActivity() {
             delay(700L)
             cambiarEstado(EstadoTransaccion.PROCESANDO_TRANSACCION)
 
+            val total = CheckoutSession.carrito.total
             val metodo = CheckoutSession.metodoPago ?: MetodoPago.TARJETA
-            val resultado = pasarela.procesarPago(CheckoutSession.carrito.total, metodo)
-            CheckoutSession.resultadoPago = resultado
-
-            cambiarEstado(EstadoTransaccion.GENERANDO_COMPROBANTE)
-            delay(700L)
-
+            
+            // 1. Simular procesamiento de pasarela
+            val resultado = pasarela.procesarPago(total, metodo)
+            
             if (resultado.exitoso) {
-                // Actualizar stock en Firebase antes de finalizar
-                actualizarStockProductos(CheckoutSession.carrito)
-
-                CheckoutSession.comprobantePago = PagoLogic.crearComprobante(CheckoutSession.carrito, resultado)
-                cambiarEstado(EstadoTransaccion.APROBADO)
+                cambiarEstado(EstadoTransaccion.GENERANDO_COMPROBANTE)
+                
+                // 2. Intentar registrar pedido y actualizar stock en Firebase
+                val exitoFirebase = registrarPedidoYActualizarStock(total)
+                
+                if (exitoFirebase) {
+                    CheckoutSession.resultadoPago = resultado
+                    CheckoutSession.comprobantePago = PagoLogic.crearComprobante(CheckoutSession.carrito, resultado)
+                    cambiarEstado(EstadoTransaccion.APROBADO)
+                } else {
+                    // Si falla Firebase, revertimos el éxito de la pasarela para el usuario
+                    CheckoutSession.resultadoPago = PagoLogic.crearResultadoRechazado(total, metodo, "ERR_FIREBASE_SYNC")
+                    cambiarEstado(EstadoTransaccion.RECHAZADO)
+                }
             } else {
+                CheckoutSession.resultadoPago = resultado
                 cambiarEstado(EstadoTransaccion.RECHAZADO)
             }
 
+            delay(700L)
             startActivity(Intent(this@ProcesandoPagoActivity, ResultadoPagoActivity::class.java))
             finish()
         }
@@ -57,29 +71,57 @@ class ProcesandoPagoActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.tvPasoComprobante).text = paso("Generando comprobante", estado, EstadoTransaccion.GENERANDO_COMPROBANTE)
     }
 
-    private fun actualizarStockProductos(carrito: Carrito) {
-        val db = com.google.firebase.firestore.FirebaseFirestore.getInstance()
-        val batch = db.batch()
+    private suspend fun registrarPedidoYActualizarStock(total: Double): Boolean {
+        return try {
+            val db = FirebaseFirestore.getInstance()
+            val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return false
+            val batch = db.batch()
 
-        for (item in carrito.items) {
-            val productoRef = db.collection("productos").document(item.idProducto)
+            // 1. Crear documento de Pedido
+            val pedidoRef = db.collection("pedidos").document()
+            val numeroPedido = PagoLogic.generarNumeroPedido()
+            val descripcion = CheckoutSession.carrito.items.joinToString(", ") { "${it.cantidad}x ${it.nombre}" }
             
-            // Usamos una operación de decremento atómico de Firestore
-            batch.update(productoRef, "stock", com.google.firebase.firestore.FieldValue.increment(-item.cantidad.toLong()))
-        }
+            // Log de depuración para verificar el ID antes de guardar
+            val repartidorAsignado = "n1wV4YSLvLOIY37XgbyyuSedjNn1"
+            android.util.Log.d("PedidoAsignacion", "Asignando pedido a repartidorId: $repartidorAsignado")
 
-        // También vaciamos el carrito en la nube al completar la compra
-        val uid = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid
-        if (uid != null) {
-            val carritoRef = db.collection("usuarios").document(uid).collection("carrito").document("actual")
-            batch.delete(carritoRef)
-            
-            // Nota: En una app real también deberías borrar la sub-colección 'items', 
-            // pero para esta prueba el decremento de stock es lo principal.
-        }
+            val nuevoPedido = Pedido(
+                id = pedidoRef.id,
+                clienteId = uid,
+                repartidorId = repartidorAsignado,
+                numeroPedido = numeroPedido,
+                fecha = System.currentTimeMillis(),
+                estado = EstadoPedido.PENDIENTE,
+                descripcionItems = descripcion,
+                total = total
+            )
+            batch.set(pedidoRef, nuevoPedido)
 
-        batch.commit().addOnFailureListener { e ->
-            android.util.Log.e("StockUpdate", "Error al actualizar stock", e)
+            // 2. Referencias del carrito
+            val cartDocRef = db.collection("usuarios").document(uid).collection("carrito").document("actual")
+            val itemsCollectionRef = cartDocRef.collection("items")
+
+            // 3. Actualizar stock y preparar limpieza de items
+            for (item in CheckoutSession.carrito.items) {
+                if (item.idProducto.isNotEmpty()) {
+                    val productoRef = db.collection("productos").document(item.idProducto)
+                    batch.update(productoRef, "stock", FieldValue.increment(-item.cantidad.toLong()))
+                    
+                    val itemCarritoRef = itemsCollectionRef.document(item.idProducto)
+                    batch.delete(itemCarritoRef)
+                }
+            }
+
+            // 4. Borrar documento raíz del carrito
+            batch.delete(cartDocRef)
+
+            // 5. Ejecutar TODO y esperar éxito
+            batch.commit().await()
+            true
+        } catch (e: Exception) {
+            android.util.Log.e("FirebaseSync", "Error en la transacción de Firebase", e)
+            false
         }
     }
 

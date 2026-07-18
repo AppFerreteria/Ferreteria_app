@@ -7,25 +7,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.button.MaterialButton
-import com.google.firebase.auth.FirebaseAuth
 
 class PrincipalActivity : AppCompatActivity() {
 
-    private lateinit var auth: FirebaseAuth
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // 1. Inicializar motor de Firebase Auth
-        auth = FirebaseAuth.getInstance()
-
-        if (auth.currentUser != null) {
-
-            val intent = Intent(this, CatalogoActivity::class.java)
-            startActivity(intent)
-            finish()
-            return
-        }
 
         enableEdgeToEdge()
         setContentView(R.layout.activity_principal)
@@ -37,9 +23,17 @@ class PrincipalActivity : AppCompatActivity() {
         }
 
         val btnClient = findViewById<MaterialButton>(R.id.btnClient)
+        val btnDelivery = findViewById<MaterialButton>(R.id.btnDelivery)
 
         btnClient.setOnClickListener {
-            val intent = Intent(this, ClienteActivity::class.java)
+            val intent = Intent(this, IniciarSesionActivity::class.java)
+            intent.putExtra("ROL", "CLIENTE")
+            startActivity(intent)
+        }
+
+        btnDelivery.setOnClickListener {
+            val intent = Intent(this, IniciarSesionActivity::class.java)
+            intent.putExtra("ROL", "REPARTIDOR")
             startActivity(intent)
         }
     }

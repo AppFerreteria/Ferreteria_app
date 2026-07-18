@@ -145,4 +145,13 @@
     <string name="texto_esperando_ubicacion">Esperando la primera ubicación del repartidor…</string>
     <string name="texto_placeholder_mapa">Vista de mapa (pendiente de conectar Google Maps SDK)</string>
     <string name="error_pedido_no_encontrado">No se pudo cargar este pedido</string>
+
+    <string name="btn_generar_qr">Generar QR</string>
+    <string name="btn_escanear_qr">Escanear QR</string>
+    <string name="titulo_confirmacion_entrega">Confirmación de Entrega</string>
+    <string name="mensaje_exito_entrega">¡Entrega confirmada exitosamente!</string>
+    <string name="error_qr_invalido">El código QR no es válido o ya ha expirado.</string>
+    <string name="error_permiso_camara">Se requiere permiso de cámara para escanear el código QR.</string>
+    <string name="titulo_pedidos_repartidor">Pedidos Asignados</string>
+    <string name="instrucciones_qr_repartidor">Muestre este código al cliente para confirmar la entrega</string>
 </resources>
