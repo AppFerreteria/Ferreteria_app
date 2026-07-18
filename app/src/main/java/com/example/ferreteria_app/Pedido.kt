@@ -8,7 +8,11 @@ data class Pedido(
     val fecha: Long = System.currentTimeMillis(),
     val estado: String = EstadoPedido.PENDIENTE,
     val descripcionItems: String = "",
-    val total: Double = 0.0
+    val total: Double = 0.0,
+    val tokenQR: String? = null,
+    val fechaEntrega: Long? = null,
+    val confirmado: Boolean = false,
+    val fechaExpiracionQR: Long? = null
 )
 
 object EstadoPedido {

@@ -82,22 +82,28 @@ class RegistroActivity : AppCompatActivity() {
                         val userId = auth.currentUser?.uid
 
                         // Mapeo de datos para Firestore
-                        val cliente = Cliente(
-                            nombre = nombre,
-                            email = email,
-                            telefono = telefono
+                        val rol = intent.getStringExtra("ROL") ?: "CLIENTE"
+                        val userData = hashMapOf(
+                            "nombre" to nombre,
+                            "email" to email,
+                            "telefono" to telefono,
+                            "rol" to rol
                         )
 
                         if (userId != null) {
                             db.collection("usuarios").document(userId)
-                                .set(cliente)
+                                .set(userData)
                                 .addOnSuccessListener {
                                     Toast.makeText(this, "Cuenta creada con éxito", Toast.LENGTH_SHORT).show()
 
-                                    // Enrutamiento al Catálogo
-                                    val intent = Intent(this, CatalogoActivity::class.java)
-                                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                    startActivity(intent)
+                                    // Enrutamiento según el rol
+                                    val nextIntent = if (rol == "REPARTIDOR") {
+                                        Intent(this, RepartidorPedidosActivity::class.java)
+                                    } else {
+                                        Intent(this, CatalogoActivity::class.java)
+                                    }
+                                    nextIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                    startActivity(nextIntent)
                                 }
                                 .addOnFailureListener {
                                     Toast.makeText(this, "Error al guardar el perfil", Toast.LENGTH_SHORT).show()

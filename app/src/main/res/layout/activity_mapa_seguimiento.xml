@@ -164,6 +164,14 @@
                     android:textColor="@color/text_gray"
                     android:textSize="13sp"
                     tools:text="Ubicación del repartidor: -12.0464, -77.0428" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnEscanearQR"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/btn_escanear_qr"
+                    app:cornerRadius="8dp" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
     </androidx.constraintlayout.widget.ConstraintLayout>

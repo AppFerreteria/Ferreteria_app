@@ -1,6 +1,8 @@
 package com.example.ferreteria_app
 
 object CheckoutSession {
+    var userId: String? = null
+
     var carrito: Carrito = Carrito()
         private set
 

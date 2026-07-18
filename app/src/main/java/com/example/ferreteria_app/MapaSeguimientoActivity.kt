@@ -1,5 +1,6 @@
 package com.example.ferreteria_app
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
@@ -65,6 +66,14 @@ class MapaSeguimientoActivity :
             finish()
             return
         }
+
+        val btnEscanearQR = findViewById<View>(R.id.btnEscanearQR)
+        btnEscanearQR.setOnClickListener {
+            val intentScan = Intent(this, EscaneoQRActivity::class.java)
+            intentScan.putExtra(EXTRA_PEDIDO_ID, pedidoId)
+            startActivity(intentScan)
+        }
+
         val mapFragment =
             supportFragmentManager.findFragmentById(R.id.map)
                     as SupportMapFragment
@@ -89,10 +98,13 @@ class MapaSeguimientoActivity :
                     EstadoPedido.EN_CAMINO -> {
                         mostrarVista(clMapaEnCamino)
                         escucharUbicacionRepartidor(pedido.repartidorId)
+                        
+                        // Hacer visible el botón de Escanear QR solo si está en camino
+                        findViewById<View>(R.id.btnEscanearQR).visibility = View.VISIBLE
                     }
                     EstadoPedido.ENTREGADO -> {
-
                         mostrarVista(clEstadoEntregado)
+                        findViewById<View>(R.id.btnEscanearQR).visibility = View.GONE
 
                         repartidorListener?.remove()
                         repartidorListener = null

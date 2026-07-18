@@ -11,10 +11,13 @@ import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class IniciarSesionActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
+    private val db = FirebaseFirestore.getInstance()
+    private var rolTemporal: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,6 +25,9 @@ class IniciarSesionActivity : AppCompatActivity() {
         setContentView(R.layout.activity_iniciar_sesion)
 
         auth = FirebaseAuth.getInstance()
+        
+        // Capturamos el rol de la variable temporal (Intent) al iniciar
+        rolTemporal = intent.getStringExtra("ROL")
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -37,8 +43,9 @@ class IniciarSesionActivity : AppCompatActivity() {
         val tvForgotPassword = findViewById<TextView>(R.id.tvForgotPassword)
 
         btnCreateAccount.setOnClickListener {
-            val intent = Intent(this, RegistroActivity::class.java)
-            startActivity(intent)
+            val intentRegistro = Intent(this, RegistroActivity::class.java)
+            intentRegistro.putExtra("ROL", rolTemporal)
+            startActivity(intentRegistro)
         }
 
         tvForgotPassword.setOnClickListener {
@@ -58,16 +65,52 @@ class IniciarSesionActivity : AppCompatActivity() {
             auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
-                        Toast.makeText(this, getString(R.string.toast_inicio_sesion_correcto), Toast.LENGTH_SHORT).show()
+                        // Capturamos y almacenamos el ID del usuario en la sesión
+                        CheckoutSession.userId = auth.currentUser?.uid
 
-                        val intent = Intent(this, CatalogoActivity::class.java)
-                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                        startActivity(intent)
-                        finish()
+                        verificarRolYRedirigir()
                     } else {
                         Toast.makeText(this, getString(R.string.toast_error_acceso, task.exception?.message), Toast.LENGTH_LONG).show()
                     }
                 }
         }
+    }
+
+    private fun verificarRolYRedirigir() {
+        val uid = auth.currentUser?.uid ?: return
+
+        db.collection("usuarios").document(uid).get()
+            .addOnSuccessListener { doc ->
+                val rolReal = doc.getString("rol")
+                
+                // Comparamos el rol que viene de Firebase con nuestra variable temporal
+                if (rolReal != null && rolReal.equals(rolTemporal, ignoreCase = true)) {
+                    // Almacenamos el UID real autenticado
+                    CheckoutSession.userId = uid
+
+                    // Los roles coinciden, permitimos el ingreso
+                    val intent = if (rolReal.equals("REPARTIDOR", ignoreCase = true)) {
+                        Intent(this, RepartidorPedidosActivity::class.java)
+                    } else {
+                        Intent(this, CatalogoActivity::class.java)
+                    }
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
+                    finish()
+                } else {
+                    // Los roles NO coinciden, cerramos sesión y mostramos error
+                    auth.signOut()
+                    val mensaje = if (rolTemporal == "REPARTIDOR") {
+                        "Usted no es REPARTIDOR"
+                    } else {
+                        "Usted no es CLIENTE"
+                    }
+                    Toast.makeText(this, mensaje, Toast.LENGTH_LONG).show()
+                }
+            }
+            .addOnFailureListener {
+                auth.signOut()
+                Toast.makeText(this, "Error al verificar perfil", Toast.LENGTH_SHORT).show()
+            }
     }
 }
