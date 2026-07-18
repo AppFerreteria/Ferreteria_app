@@ -19,8 +19,8 @@ object PagoLogic {
     fun generarNumeroOperacion(now: Long = System.currentTimeMillis()): String =
         "OP" + now.toString().takeLast(8)
 
-    fun generarNumeroComprobante(now: Long = System.currentTimeMillis()): String =
-        "B001-" + now.toString().takeLast(7)
+    fun generarNumeroComprobante(serie: String = "B001", now: Long = System.currentTimeMillis()): String =
+        "$serie-" + now.toString().takeLast(7)
 
     fun validarMonto(monto: Double): Boolean = monto > 0.0
 
@@ -77,18 +77,26 @@ object PagoLogic {
             mensaje = "La pasarela rechazó la transacción"
         )
 
-    fun crearComprobante(carrito: Carrito, resultado: PagoResultado): ComprobantePago =
-        ComprobantePago(
-            serie = "B001",
-            numero = generarNumeroComprobante(resultado.fechaHora),
+    fun crearComprobante(carrito: Carrito, resultado: PagoResultado): ComprobantePago {
+        val tipo = CheckoutSession.tipoComprobante
+        val esFactura = tipo == TipoComprobante.FACTURA
+        val serie = if (esFactura) "F001" else "B001"
+        val documentoCliente = if (esFactura) "RUC: ${CheckoutSession.rucFacturacion}" else "DNI: 00000000"
+
+        return ComprobantePago(
+            serie = serie,
+            numero = generarNumeroComprobante(serie, resultado.fechaHora),
             empresa = "FerreMax S.A.C.",
             ruc = "20512345678",
             cliente = "Cliente FerreMax",
-            documentoCliente = "DNI: 00000000",
+            documentoCliente = documentoCliente,
             direccion = "Av. Arequipa 2450, Lima",
             resultado = resultado,
-            carrito = carrito
+            carrito = carrito,
+            tipo = tipo,
+            rucCliente = if (esFactura) CheckoutSession.rucFacturacion else ""
         )
+    }
 
     fun textoComprobante(comprobante: ComprobantePago): String {
         val productos = comprobante.carrito.items.joinToString("\n") { item ->
@@ -97,7 +105,7 @@ object PagoLogic {
         return """
             ${comprobante.empresa}
             RUC: ${comprobante.ruc}
-            Boleta electrónica ${comprobante.numero}
+            ${comprobante.tipo.etiqueta} ${comprobante.numero}
             Operación: ${comprobante.resultado.numeroOperacion}
             Fecha: ${formatearFecha(comprobante.resultado.fechaHora)}
             Método: ${comprobante.resultado.metodo.etiqueta}

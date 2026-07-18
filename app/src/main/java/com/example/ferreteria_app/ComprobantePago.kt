@@ -9,5 +9,7 @@ data class ComprobantePago(
     val documentoCliente: String,
     val direccion: String,
     val resultado: PagoResultado,
-    val carrito: Carrito
+    val carrito: Carrito,
+    val tipo: TipoComprobante = TipoComprobante.BOLETA,
+    val rucCliente: String = ""
 )
