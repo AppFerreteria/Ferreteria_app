@@ -14,6 +14,9 @@ object CheckoutSession {
     var resultadoPago: PagoResultado? = null
     var comprobantePago: ComprobantePago? = null
 
+    var tipoComprobante: TipoComprobante = TipoComprobante.BOLETA
+    var rucFacturacion: String = ""
+
     fun iniciar(carritoActual: Carrito) {
         carrito = carritoActual
         numeroPedido = PagoLogic.generarNumeroPedido()
@@ -21,6 +24,8 @@ object CheckoutSession {
         estadoTransaccion = EstadoTransaccion.PENDIENTE
         resultadoPago = null
         comprobantePago = null
+        tipoComprobante = TipoComprobante.BOLETA
+        rucFacturacion = ""
     }
 
     fun resetear() {
@@ -30,5 +35,7 @@ object CheckoutSession {
         estadoTransaccion = EstadoTransaccion.PENDIENTE
         resultadoPago = null
         comprobantePago = null
+        tipoComprobante = TipoComprobante.BOLETA
+        rucFacturacion = ""
     }
 }

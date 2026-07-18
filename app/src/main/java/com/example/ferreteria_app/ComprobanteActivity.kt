@@ -31,7 +31,7 @@ class ComprobanteActivity : AppCompatActivity() {
 
     private fun pintarComprobante() {
         val resultado = comprobante.resultado
-        findViewById<TextView>(R.id.tvSerieComprobanteHeader).text = "Boleta electrónica · Serie ${comprobante.serie}"
+        findViewById<TextView>(R.id.tvSerieComprobanteHeader).text = "${comprobante.tipo.etiqueta} · Serie ${comprobante.serie}"
         findViewById<TextView>(R.id.tvEmpresaComprobante).text = comprobante.empresa
         findViewById<TextView>(R.id.tvRucComprobante).text = "RUC: ${comprobante.ruc}"
         findViewById<TextView>(R.id.tvNumeroComprobante).text = "Nro. de operación ${resultado.numeroOperacion}"
