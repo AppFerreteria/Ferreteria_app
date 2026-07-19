@@ -7,9 +7,12 @@ import android.widget.RadioButton
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.button.MaterialButton
 
 class MetodoPagoActivity : AppCompatActivity() {
+
+    private lateinit var viewModel: MetodoPagoViewModel
     private var metodoSeleccionado: MetodoPago? = null
 
     private lateinit var cardYape: LinearLayout
@@ -25,7 +28,9 @@ class MetodoPagoActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_metodo_pago)
 
-        findViewById<TextView>(R.id.tvTotalMetodoPago).text = PagoLogic.formatearSoles(CheckoutSession.carrito.total)
+        viewModel = ViewModelProvider(this)[MetodoPagoViewModel::class.java]
+
+        findViewById<TextView>(R.id.tvTotalMetodoPago).text = viewModel.total
         findViewById<TextView>(R.id.btnBackMetodoPago).setOnClickListener { finish() }
 
         cardYape = findViewById(R.id.cardYape)
@@ -44,7 +49,7 @@ class MetodoPagoActivity : AppCompatActivity() {
         radioTransferencia.setOnClickListener { seleccionar(MetodoPago.TRANSFERENCIA) }
 
         btnContinuar.setOnClickListener {
-            CheckoutSession.metodoPago = metodoSeleccionado
+            viewModel.seleccionarMetodo(metodoSeleccionado!!)
             when (metodoSeleccionado) {
                 MetodoPago.YAPE -> startActivity(Intent(this, YapePagoActivity::class.java))
                 MetodoPago.TARJETA -> startActivity(Intent(this, TarjetaPagoActivity::class.java))
@@ -60,8 +65,17 @@ class MetodoPagoActivity : AppCompatActivity() {
         radioYape.isChecked = metodo == MetodoPago.YAPE
         radioTarjeta.isChecked = metodo == MetodoPago.TARJETA
         radioTransferencia.isChecked = metodo == MetodoPago.TRANSFERENCIA
-        cardYape.setBackgroundResource(if (metodo == MetodoPago.YAPE) R.drawable.bg_method_selected else R.drawable.bg_method_normal)
-        cardTarjeta.setBackgroundResource(if (metodo == MetodoPago.TARJETA) R.drawable.bg_method_selected else R.drawable.bg_method_normal)
-        cardTransferencia.setBackgroundResource(if (metodo == MetodoPago.TRANSFERENCIA) R.drawable.bg_method_selected else R.drawable.bg_method_normal)
+        cardYape.setBackgroundResource(
+            if (metodo == MetodoPago.YAPE) R.drawable.bg_method_selected
+            else R.drawable.bg_method_normal
+        )
+        cardTarjeta.setBackgroundResource(
+            if (metodo == MetodoPago.TARJETA) R.drawable.bg_method_selected
+            else R.drawable.bg_method_normal
+        )
+        cardTransferencia.setBackgroundResource(
+            if (metodo == MetodoPago.TRANSFERENCIA) R.drawable.bg_method_selected
+            else R.drawable.bg_method_normal
+        )
     }
 }

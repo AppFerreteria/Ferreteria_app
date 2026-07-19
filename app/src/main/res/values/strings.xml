@@ -75,6 +75,8 @@
     <string name="badge_entregado">Entregado</string>
     <string name="label_numero_pedido">Pedido #%1$s</string>
     <string name="btn_seguir_pedido">Seguir Pedido</string>
+    <string name="btn_rastrear">Rastrear</string>
+    <string name="btn_ver_historial">Ver historial</string>
     <string name="texto_sin_pedidos">Aún no tienes pedidos registrados</string>
     <string name="toast_seguimiento_no_disponible">El seguimiento en mapa estará disponible próximamente</string>
     <string name="error_cargar_pedidos">Error al cargar tus pedidos</string>
@@ -145,4 +147,11 @@
     <string name="texto_esperando_ubicacion">Esperando la primera ubicación del repartidor…</string>
     <string name="texto_placeholder_mapa">Vista de mapa (pendiente de conectar Google Maps SDK)</string>
     <string name="error_pedido_no_encontrado">No se pudo cargar este pedido</string>
+
+    <!-- Modulo: Buscar Entrega -->
+    <string name="titulo_buscar_entrega">Buscar Entrega</string>
+    <string name="hint_numero_orden">Ingrese el numero de orden</string>
+    <string name="btn_buscar_orden">Buscar</string>
+    <string name="estado_buscando_pedido">Buscando pedido...</string>
+    <string name="error_orden_no_encontrada">No se encontro ninguna orden con ese numero</string>
 </resources>

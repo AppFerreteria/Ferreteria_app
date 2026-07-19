@@ -6,27 +6,64 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.button.MaterialButton
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.launch
 
 class PrincipalActivity : AppCompatActivity() {
 
-    private lateinit var auth: FirebaseAuth
+    private lateinit var viewModel: PrincipalViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // 1. Inicializar motor de Firebase Auth
-        auth = FirebaseAuth.getInstance()
+        viewModel = ViewModelProvider(this)[PrincipalViewModel::class.java]
 
-        if (auth.currentUser != null) {
-
-            val intent = Intent(this, CatalogoActivity::class.java)
-            startActivity(intent)
+        if (SessionManager.sesionRepartidorActiva(this)) {
+            startActivity(Intent(this, BuscarEntregaActivity::class.java))
             finish()
             return
         }
 
+        val usuarioAnonimo = FirebaseAuth.getInstance().currentUser?.isAnonymous == true
+        if (usuarioAnonimo) {
+            FirebaseAuth.getInstance().signOut()
+            SessionManager.cerrarSesionRepartidor(this)
+            mostrarVistaPrincipal()
+            return
+        }
+
+        if (!viewModel.sesionActiva) {
+            mostrarVistaPrincipal()
+            return
+        }
+
+        viewModel.verificarSesionYRol()
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.rol.collect { rol ->
+                    when (rol) {
+                        RolUsuario.CLIENTE -> {
+                            startActivity(Intent(this@PrincipalActivity, CatalogoActivity::class.java))
+                            finish()
+                        }
+                        RolUsuario.REPARTIDOR -> {
+                            startActivity(Intent(this@PrincipalActivity, BuscarEntregaActivity::class.java))
+                            finish()
+                        }
+                        null -> mostrarVistaPrincipal()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun mostrarVistaPrincipal() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_principal)
 
@@ -36,11 +73,12 @@ class PrincipalActivity : AppCompatActivity() {
             insets
         }
 
-        val btnClient = findViewById<MaterialButton>(R.id.btnClient)
+        findViewById<MaterialButton>(R.id.btnClient).setOnClickListener {
+            startActivity(Intent(this, ClienteActivity::class.java))
+        }
 
-        btnClient.setOnClickListener {
-            val intent = Intent(this, ClienteActivity::class.java)
-            startActivity(intent)
+        findViewById<MaterialButton>(R.id.btnDelivery).setOnClickListener {
+            startActivity(Intent(this, LoginRepartidorActivity::class.java))
         }
     }
 }

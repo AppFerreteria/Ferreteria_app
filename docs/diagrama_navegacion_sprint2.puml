@@ -1,0 +1,56 @@
+@startuml
+title Diagrama de Navegación - Sprint 2
+
+left to right direction
+
+rectangle "menu_navegacion.xml" as menu
+
+rectangle "activity_catalogo.xml" as catalogo
+rectangle "activity_buscar.xml" as buscar
+rectangle "activity_carrito.xml" as carrito
+rectangle "activity_perfil.xml" as perfil
+rectangle "activity_pedido.xml" as pedido
+
+rectangle "activity_editar_perfil.xml" as editarPerfil
+rectangle "activity_pasarela_pago.xml" as pasarela
+rectangle "activity_mapa_seguimiento.xml" as mapa
+
+' Menú inferior
+menu --> catalogo : nav_inicio
+menu --> buscar : nav_buscar
+menu --> carrito : nav_carrito
+menu --> pedido : nav_pedidos
+menu --> perfil : nav_perfil
+
+catalogo --> menu
+buscar --> menu
+carrito --> menu
+pedido --> menu
+perfil --> menu
+
+' Perfil → Editar Perfil
+perfil --> editarPerfil : btn_editar_perfil
+
+' Carrito → Pasarela de Pago
+carrito --> pasarela : btnContinuarCompra
+pasarela -[hidden]> carrito
+
+' Validación datos facturación
+pasarela --> editarPerfil : datos incompletos
+editarPerfil --> pasarela : datos guardados
+
+' Pago exitoso → Pedido
+pasarela --> pedido : pago exitoso
+
+' Pedido → Mapa (solo EN_CAMINO)
+pedido --> mapa : "Rastrear"
+
+note right of pedido
+  activity_pedido.xml:
+  • "En proceso"
+    (EN_PREPARACION, EN_CAMINO)
+  • "Historial"
+    (ENTREGADO, CANCELADO)
+end note
+
+@enduml

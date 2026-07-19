@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:allowBackup="true"
@@ -54,6 +55,9 @@
             android:name=".RegistroActivity"
             android:exported="false" />
         <activity
+            android:name=".LoginRepartidorActivity"
+            android:exported="false" />
+        <activity
             android:name=".CatalogoActivity"
             android:exported="false" />
         <activity
@@ -72,6 +76,12 @@
             android:name=".MapaSeguimientoActivity"
             android:exported="false" />
         <activity
+            android:name=".BuscarEntregaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RepartidorActivity"
+            android:exported="false" />
+        <activity
             android:name=".PrincipalActivity"
             android:exported="true">
             <intent-filter>
@@ -80,6 +90,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name=".MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

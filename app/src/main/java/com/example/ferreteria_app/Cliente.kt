@@ -7,5 +7,6 @@ data class Cliente(
     val tipoDocumento: String = "",
     val numeroDocumento: String = "",
     val direccion: String = "",
-    val referencia: String = ""
+    val referencia: String = "",
+    val rol: String = RolUsuario.CLIENTE.name
 )

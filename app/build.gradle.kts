@@ -47,6 +47,8 @@ dependencies {
     implementation("com.google.android.gms:play-services-maps:19.2.0")
     implementation("com.google.android.gms:play-services-location:21.3.0")
     testImplementation(libs.junit)
+    testImplementation(libs.coroutines.test)
+    testImplementation(libs.turbine)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     //implementation("androidx.constraintlayout:constraintlayout:2.2.0")
@@ -62,4 +64,7 @@ dependencies {
 
     // Motor oficial de Firebase Authentication
     implementation("com.google.firebase:firebase-auth")
+
+    // Firebase Cloud Messaging para notificaciones push
+    implementation("com.google.firebase:firebase-messaging")
 }

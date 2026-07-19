@@ -7,8 +7,13 @@ data class Pedido(
     val numeroPedido: String = "",
     val fecha: Long = System.currentTimeMillis(),
     val estado: String = EstadoPedido.PENDIENTE,
-    val descripcionItems: String = "",
-    val total: Double = 0.0
+    val subtotal: Double = 0.0,
+    val descuento: Double = 0.0,
+    val costoEnvio: Double = 0.0,
+    val total: Double = 0.0,
+    val direccionEntrega: String = "",
+    val items: List<CarritoItem> = emptyList(),
+    val descripcionItems: String = ""
 )
 
 object EstadoPedido {

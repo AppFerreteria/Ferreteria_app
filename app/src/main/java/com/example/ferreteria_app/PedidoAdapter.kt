@@ -37,7 +37,12 @@ class PedidoAdapter(
 
         holder.tvNumeroPedido.text = context.getString(R.string.label_numero_pedido, pedido.numeroPedido)
         holder.tvFechaPedido.text = formatearFecha(pedido.fecha)
-        holder.tvDescripcionItems.text = pedido.descripcionItems
+        val textoItems = if (pedido.items.isNotEmpty()) {
+            pedido.items.joinToString(separator = ", ") { "${it.cantidad}x ${it.nombre}" }
+        } else {
+            pedido.descripcionItems
+        }
+        holder.tvDescripcionItems.text = textoItems
         holder.tvTotalPedido.text = context.getString(R.string.formato_precio, pedido.total)
 
         val (textoBadge, colorFondo, colorTexto) = when (pedido.estado) {
@@ -72,6 +77,7 @@ class PedidoAdapter(
             holder.btnSeguirPedido.visibility = View.GONE
         } else {
             holder.btnSeguirPedido.visibility = View.VISIBLE
+            holder.btnSeguirPedido.text = context.getString(R.string.btn_rastrear)
             holder.btnSeguirPedido.setOnClickListener { onSeguirPedido(pedido) }
         }
     }

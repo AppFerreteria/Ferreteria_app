@@ -14,16 +14,22 @@ class CarritoViewModel : ViewModel() {
     private val _carritoState = MutableStateFlow(Carrito())
     val carritoState: StateFlow<Carrito> = _carritoState.asStateFlow()
 
+    private val _uiState = MutableStateFlow<UiState<Carrito>>(UiState.Loading)
+    val uiState: StateFlow<UiState<Carrito>> = _uiState.asStateFlow()
+
     fun iniciarEscucha() {
         viewModelScope.launch {
+            _uiState.value = UiState.Loading
             repository.escucharCarrito().collect { carrito ->
                 _carritoState.value = carrito
+                _uiState.value = UiState.Success(carrito)
             }
         }
     }
 
     fun detenerEscucha() {
         _carritoState.value = Carrito()
+        _uiState.value = UiState.Loading
     }
 
     fun actualizarCantidad(item: CarritoItem, nuevaCantidad: Int) {

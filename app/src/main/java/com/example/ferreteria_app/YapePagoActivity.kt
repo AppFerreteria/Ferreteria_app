@@ -2,47 +2,45 @@ package com.example.ferreteria_app
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.CountDownTimer
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.button.MaterialButton
+import kotlinx.coroutines.launch
 
 class YapePagoActivity : AppCompatActivity() {
-    private var timer: CountDownTimer? = null
+
+    private lateinit var viewModel: YapePagoViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_yape_pago)
 
+        viewModel = ViewModelProvider(this)[YapePagoViewModel::class.java]
+
         findViewById<TextView>(R.id.btnBackYape).setOnClickListener { finish() }
-        findViewById<TextView>(R.id.tvTotalYape).text = PagoLogic.formatearSoles(CheckoutSession.carrito.total)
+        findViewById<TextView>(R.id.tvTotalYape).text = viewModel.total
+
         findViewById<MaterialButton>(R.id.btnConfirmarYape).setOnClickListener {
             CheckoutSession.metodoPago = MetodoPago.YAPE
             startActivity(Intent(this, ProcesandoPagoActivity::class.java))
         }
-        iniciarContador()
-    }
 
-    private fun iniciarContador() {
-        val tvCountdown = findViewById<TextView>(R.id.tvCountdownYape)
-        timer = object : CountDownTimer(300_000L, 1_000L) {
-            override fun onTick(millisUntilFinished: Long) {
-                val totalSegundos = millisUntilFinished / 1000
-                val minutos = totalSegundos / 60
-                val segundos = totalSegundos % 60
-                tvCountdown.text = "Expira en %02d:%02d".format(minutos, segundos)
+        viewModel.iniciarContador()
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.tiempoRestante.collect { tiempo ->
+                        findViewById<TextView>(R.id.tvCountdownYape).text = tiempo
+                    }
+                }
             }
-
-            override fun onFinish() {
-                tvCountdown.text = "QR expirado"
-            }
-        }.start()
-    }
-
-    override fun onDestroy() {
-        timer?.cancel()
-        super.onDestroy()
+        }
     }
 }

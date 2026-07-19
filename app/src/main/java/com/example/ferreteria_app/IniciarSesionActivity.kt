@@ -8,20 +8,24 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
-import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.launch
 
 class IniciarSesionActivity : AppCompatActivity() {
 
-    private lateinit var auth: FirebaseAuth
+    private lateinit var viewModel: LoginViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_iniciar_sesion)
 
-        auth = FirebaseAuth.getInstance()
+        viewModel = ViewModelProvider(this)[LoginViewModel::class.java]
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -33,41 +37,57 @@ class IniciarSesionActivity : AppCompatActivity() {
         val etPassword = findViewById<TextInputEditText>(R.id.etPassword)
         val btnSignIn = findViewById<MaterialButton>(R.id.btnSignIn)
         val btnCreateAccount = findViewById<MaterialButton>(R.id.btnCreateAccount)
-
         val tvForgotPassword = findViewById<TextView>(R.id.tvForgotPassword)
 
         btnCreateAccount.setOnClickListener {
-            val intent = Intent(this, RegistroActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, RegistroActivity::class.java))
         }
 
         tvForgotPassword.setOnClickListener {
-            val intent = Intent(this, RecuperarActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, RecuperarActivity::class.java))
         }
 
         btnSignIn.setOnClickListener {
             val email = etEmail.text.toString().trim()
             val password = etPassword.text.toString().trim()
+            viewModel.iniciarSesion(email, password)
+        }
 
-            if (email.isEmpty() || password.isEmpty()) {
-                Toast.makeText(this, getString(R.string.error_credenciales_vacias), Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            auth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        Toast.makeText(this, getString(R.string.toast_inicio_sesion_correcto), Toast.LENGTH_SHORT).show()
-
-                        val intent = Intent(this, CatalogoActivity::class.java)
-                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                        startActivity(intent)
-                        finish()
-                    } else {
-                        Toast.makeText(this, getString(R.string.toast_error_acceso, task.exception?.message), Toast.LENGTH_LONG).show()
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect { state ->
+                    when (state) {
+                        is UiState.Loading -> {
+                            btnSignIn.isEnabled = false
+                            btnSignIn.text = "Iniciando sesion..."
+                        }
+                        is UiState.Success -> {
+                            Toast.makeText(
+                                this@IniciarSesionActivity,
+                                getString(R.string.toast_inicio_sesion_correcto),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            val destino = when (state.data) {
+                                RolUsuario.CLIENTE -> CatalogoActivity::class.java
+                                RolUsuario.REPARTIDOR -> BuscarEntregaActivity::class.java
+                            }
+                            val intent = Intent(this@IniciarSesionActivity, destino)
+                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            startActivity(intent)
+                            finish()
+                        }
+                        is UiState.Error -> {
+                            btnSignIn.isEnabled = true
+                            btnSignIn.text = getString(R.string.btn_iniciar_sesion)
+                            Toast.makeText(
+                                this@IniciarSesionActivity,
+                                state.mensaje,
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
                     }
                 }
+            }
         }
     }
 }

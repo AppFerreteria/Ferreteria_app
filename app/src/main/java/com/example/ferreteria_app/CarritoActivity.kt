@@ -53,7 +53,7 @@ class CarritoActivity : AppCompatActivity() {
 
         findViewById<MaterialButton>(R.id.btnContinuarCompra).setOnClickListener {
             if (carritoActual.items.isEmpty()) {
-                Toast.makeText(this, "Tu carrito está vacío", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Tu carrito esta vacio", Toast.LENGTH_SHORT).show()
             } else {
                 CheckoutSession.iniciar(carritoActual)
                 startActivity(Intent(this, ResumenPedidoActivity::class.java))
@@ -67,7 +67,9 @@ class CarritoActivity : AppCompatActivity() {
 
         adaptador = CarritoAdapter(
             lista = emptyList(),
-            onCambiarCantidad = { item, nuevaCantidad -> viewModel.actualizarCantidad(item, nuevaCantidad) },
+            onCambiarCantidad = { item, nuevaCantidad ->
+                viewModel.actualizarCantidad(item, nuevaCantidad)
+            },
             onEliminar = { item -> viewModel.eliminarItem(item) }
         )
         rv.adapter = adaptador
@@ -105,24 +107,19 @@ class CarritoActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.nav_inicio -> {
                     startActivity(Intent(this, CatalogoActivity::class.java))
-                    finish()
-                    true
+                    finish(); true
                 }
                 R.id.nav_buscar -> {
                     startActivity(Intent(this, BuscarActivity::class.java))
-                    finish()
-                    true
+                    finish(); true
                 }
                 R.id.nav_pedidos -> {
                     startActivity(Intent(this, PedidoActivity::class.java))
-                    finish()
-                    true
+                    finish(); true
                 }
-
                 R.id.nav_perfil -> {
                     startActivity(Intent(this, PerfilActivity::class.java))
-                    finish()
-                    true
+                    finish(); true
                 }
                 else -> true
             }

@@ -7,23 +7,25 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.launch
 
 class PerfilActivity : AppCompatActivity() {
 
-    private lateinit var auth: FirebaseAuth
-    private lateinit var db: FirebaseFirestore
+    private lateinit var viewModel: PerfilViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_perfil)
 
-        auth = FirebaseAuth.getInstance()
-        db = FirebaseFirestore.getInstance()
+        viewModel = ViewModelProvider(this)[PerfilViewModel::class.java]
 
         configurarNavegacionInferior()
 
@@ -32,39 +34,41 @@ class PerfilActivity : AppCompatActivity() {
         }
 
         findViewById<LinearLayout>(R.id.btnLogout).setOnClickListener {
-            cerrarSesion()
+            viewModel.cerrarSesion()
+            FirebaseAuth.getInstance().signOut()
+            SessionManager.cerrarSesionRepartidor(this)
+            val intent = Intent(this, PrincipalActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            finish()
+            Toast.makeText(this, getString(R.string.toast_cierre_sesion), Toast.LENGTH_SHORT).show()
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect { state ->
+                    when (state) {
+                        is UiState.Loading -> {}
+                        is UiState.Success -> {
+                            val cliente = state.data
+                            findViewById<TextView>(R.id.tvNombrePerfil).text = cliente.nombre
+                            findViewById<TextView>(R.id.tvEmailPerfil).text = viewModel.email
+                            findViewById<TextView>(R.id.tvTelefonoPerfil).text =
+                                if (cliente.telefono.isNotEmpty()) cliente.telefono
+                                else getString(R.string.texto_sin_telefono)
+                        }
+                        is UiState.Error -> {
+                            Toast.makeText(this@PerfilActivity, state.mensaje, Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            }
         }
     }
 
     override fun onResume() {
         super.onResume()
-        cargarDatosUsuario()
-    }
-
-    private fun cargarDatosUsuario() {
-        val uid = auth.currentUser?.uid
-        if (uid != null) {
-            db.collection("usuarios").document(uid).get()
-                .addOnSuccessListener { doc ->
-                    if (doc.exists()) {
-                        val cliente = doc.toObject(Cliente::class.java) ?: Cliente()
-                        findViewById<TextView>(R.id.tvNombrePerfil).text = cliente.nombre
-                        findViewById<TextView>(R.id.tvEmailPerfil).text = auth.currentUser?.email
-                        findViewById<TextView>(R.id.tvTelefonoPerfil).text =
-                            if (cliente.telefono.isNotEmpty()) cliente.telefono else getString(R.string.texto_sin_telefono)
-                    }
-                }
-        }
-    }
-
-    private fun cerrarSesion() {
-        auth.signOut()
-        val intent = Intent(this, IniciarSesionActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        startActivity(intent)
-        finish()
-
-        Toast.makeText(this, getString(R.string.toast_cierre_sesion), Toast.LENGTH_SHORT).show()
+        viewModel.cargarDatos()
     }
 
     private fun configurarNavegacionInferior() {
@@ -74,26 +78,20 @@ class PerfilActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.nav_inicio -> {
                     startActivity(Intent(this, CatalogoActivity::class.java))
-                    finish()
-                    true
+                    finish(); true
                 }
                 R.id.nav_buscar -> {
                     startActivity(Intent(this, BuscarActivity::class.java))
-                    finish()
-                    true
+                    finish(); true
                 }
                 R.id.nav_carrito -> {
                     startActivity(Intent(this, CarritoActivity::class.java))
-                    finish()
-                    true
+                    finish(); true
                 }
-
                 R.id.nav_pedidos -> {
                     startActivity(Intent(this, PedidoActivity::class.java))
-                    finish()
-                    true
+                    finish(); true
                 }
-
                 else -> true
             }
         }
